@@ -1,0 +1,181 @@
+.manager-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 0;
+  background: none;
+  border: none;
+  color: var(--agenta-accent);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.manager-back:hover {
+  text-decoration: underline;
+}
+
+.manager-member-header {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2.25rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid var(--agenta-border);
+}
+
+.manager-member-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 16px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.manager-member-header-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.manager-member-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+}
+
+.manager-member-email {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 0.25rem 0;
+}
+
+.manager-member-role {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 0.5rem 0;
+}
+
+.manager-member-fire {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 8px;
+  color: #fca5a5;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.manager-member-fire:hover {
+  background: rgba(239, 68, 68, 0.25);
+}
+
+.manager-member-card {
+  background: var(--agenta-card-bg);
+  border: 1px solid var(--agenta-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.manager-member-card:last-child {
+  margin-bottom: 0;
+}
+
+.manager-member-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.manager-member-dl {
+  margin: 0;
+  display: grid;
+  gap: 0.5rem 1rem;
+}
+
+.manager-member-dl dt {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+.manager-member-dl dd {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.manager-member-list-block {
+  margin-bottom: 1rem;
+}
+
+.manager-member-list-block dt {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.35rem;
+}
+
+.manager-member-list-block ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.manager-member-tags {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.manager-member-tags li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.65rem;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.manager-member-elo {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.manager-member-empty {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.manager-member-assign-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.manager-member-assign-item {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.manager-member-assign-item:last-child {
+  border-bottom: none;
+}
+
+.manager-member-assign-title {
+  font-weight: 500;
+}
+
+.manager-member-assign-meta {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+}

@@ -1,0 +1,152 @@
+.manager-calendar-section {
+  margin-bottom: 2.75rem;
+}
+
+.manager-calendar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.manager-calendar-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--agenta-border);
+  background: var(--agenta-card-bg);
+  color: var(--agenta-text);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.manager-calendar-nav-btn:hover {
+  background: var(--agenta-bg-subtle);
+}
+
+.manager-calendar-month-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--agenta-text);
+}
+
+.manager-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: var(--agenta-border);
+  border: 1px solid var(--agenta-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.manager-calendar-weekday {
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--agenta-text-muted);
+  background: var(--agenta-bg-subtle);
+  text-align: center;
+}
+
+.manager-calendar-day {
+  min-height: 80px;
+  padding: 0.5rem;
+  background: var(--agenta-card-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.manager-calendar-day--empty {
+  background: var(--agenta-bg-subtle);
+  min-height: 60px;
+}
+
+.manager-calendar-day-num {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--agenta-text);
+}
+
+.manager-calendar-day-events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.manager-calendar-day-event {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.35rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.2rem;
+}
+
+.manager-calendar-day-event--deadline {
+  background: var(--agenta-accent-dim);
+  color: var(--agenta-accent);
+}
+
+.manager-calendar-day-event--google {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+
+.manager-calendar-day-event--more {
+  font-style: italic;
+  color: var(--agenta-text-muted);
+  background: transparent;
+}
+
+.manager-calendar-google-loading {
+  margin-top: 0.75rem;
+}
+
+.manager-calendar-item-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  margin-right: 0.5rem;
+  background: var(--agenta-accent-dim);
+  color: var(--agenta-accent);
+}
+
+.manager-calendar-item-badge--google {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+.manager-calendar-item--deadline .manager-calendar-item-title {
+  display: flex;
+  align-items: center;
+}
+
+.manager-calendar-item--google .manager-calendar-item-title {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  .manager-calendar-day {
+    min-height: 60px;
+  }
+
+  .manager-calendar-day-event {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.25rem;
+  }
+}

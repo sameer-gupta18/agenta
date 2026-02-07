@@ -1,0 +1,797 @@
+.manager-dash {
+  min-height: 100vh;
+  background: var(--agenta-bg);
+  color: var(--agenta-text);
+  padding: 0;
+  margin: 0;
+}
+
+.manager-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--agenta-border);
+}
+
+.manager-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.manager-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-name {
+  font-size: 0.9rem;
+  color: var(--agenta-text-muted);
+}
+
+.btn-icon {
+  background: var(--agenta-bg-subtle);
+  border: 1px solid var(--agenta-border);
+  color: var(--agenta-text);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.btn-icon:hover {
+  background: var(--agenta-card-bg);
+}
+
+.dash-error {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--agenta-error);
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dash-error button {
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.section {
+  margin-bottom: 2.75rem;
+  padding: 0;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.section h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0 0 1.25rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section > .muted {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  background: linear-gradient(135deg, #c97070 0%, #b85c5c 100%);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(201, 112, 112, 0.35);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: #e8e8e8;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: var(--agenta-card-bg);
+}
+
+.btn-small {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.45);
+  border-radius: 8px;
+  color: #15803d;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+[data-theme="dark"] .btn-small {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: #86efac;
+}
+
+.btn-small:hover {
+  background: rgba(34, 197, 94, 0.25);
+}
+
+[data-theme="dark"] .btn-small:hover {
+  background: rgba(34, 197, 94, 0.3);
+}
+
+.invite-box {
+  background: var(--agenta-card-bg);
+  border: 1px solid var(--agenta-border);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.invite-box code {
+  display: block;
+  word-break: break-all;
+  font-size: 0.8rem;
+  color: var(--agenta-text);
+  margin: 0.5rem 0 0.75rem 0;
+}
+
+.invite-box button {
+  background: var(--agenta-bg-subtle);
+  border: 1px solid var(--agenta-border);
+  color: var(--agenta-text);
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.employee-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.employee-card {
+  background: var(--agenta-card-bg);
+  border: 1px solid var(--agenta-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+}
+
+.emp-name {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--agenta-text);
+}
+
+.emp-meta {
+  font-size: 0.85rem;
+  color: var(--agenta-text-muted);
+}
+
+.project-form label {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.project-form label span,
+.project-form label {
+  font-size: 0.9rem;
+  color: var(--agenta-text);
+}
+
+.project-form input,
+.project-form select,
+.project-form textarea {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.6rem 0.9rem;
+  margin-top: 0.35rem;
+  border: 1px solid var(--agenta-border);
+  border-radius: 8px;
+  background: var(--agenta-bg-subtle);
+  color: var(--agenta-text);
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.project-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.employee-form {
+  max-width: 520px;
+}
+
+.form-section {
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--agenta-border);
+}
+
+.form-section:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.form-section-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--agenta-text);
+  margin: 0 0 0.75rem 0;
+}
+
+.file-label {
+  display: block;
+  margin-bottom: 0;
+}
+
+.file-input {
+  position: absolute;
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.file-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: var(--agenta-accent-dim);
+  border: 1px dashed rgba(201, 112, 112, 0.4);
+  border-radius: 10px;
+  color: var(--agenta-accent);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.file-button:hover {
+  background: rgba(201, 112, 112, 0.25);
+  border-color: rgba(201, 112, 112, 0.6);
+}
+
+.employee-form input,
+.employee-form textarea {
+  max-width: 100%;
+}
+
+.assignment-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.section .assignment-list {
+  margin-top: 0.25rem;
+}
+
+.assignment-card {
+  background: var(--agenta-card-bg);
+  border: 1px solid var(--agenta-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+}
+
+.assignment-card.status-done {
+  border-color: rgba(34, 197, 94, 0.35);
+  background: rgba(34, 197, 94, 0.08);
+}
+
+.assignment-card.status-done .assign-title {
+  color: #166534;
+}
+
+[data-theme="dark"] .assignment-card.status-done .assign-title {
+  color: var(--agenta-text);
+}
+
+.assignment-card.status-done .assign-meta {
+  color: #15803d;
+}
+
+[data-theme="dark"] .assignment-card.status-done .assign-meta {
+  color: var(--agenta-text-muted);
+}
+
+.assign-title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--agenta-text);
+}
+
+.assign-meta {
+  font-size: 0.85rem;
+  color: var(--agenta-text-muted);
+}
+
+.assign-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: var(--agenta-card-bg);
+  color: var(--agenta-text);
+  border: 1px solid var(--agenta-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  max-width: 420px;
+  width: 90%;
+}
+
+.modal-content h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  color: var(--agenta-text);
+}
+
+.delegate-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.delegate-list .btn-small {
+  width: 100%;
+  text-align: left;
+}
+
+.muted {
+  color: var(--agenta-text-muted);
+  font-size: 0.9rem;
+}
+
+/* Shared manager page (inside layout) */
+.manager-dash--page {
+  padding: 0;
+  margin: 0;
+  max-width: 100%;
+}
+
+.manager-page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--agenta-text);
+}
+
+.manager-dash--page > .muted:first-of-type {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.manager-team-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.manager-team-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--agenta-card-bg);
+  border: 1px solid var(--agenta-border);
+  border-radius: 12px;
+  color: var(--agenta-text);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.manager-team-card:hover {
+  background: var(--agenta-bg-subtle);
+  border-color: rgba(201, 112, 112, 0.35);
+}
+
+.manager-team-card__avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.manager-team-card__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.manager-team-card__name {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--agenta-text);
+}
+
+.manager-team-card__meta {
+  font-size: 0.85rem;
+  color: var(--agenta-text-muted);
+}
+
+.manager-team-card__role {
+  font-size: 0.85rem;
+  color: var(--agenta-text-muted);
+  margin-top: 0.25rem;
+}
+
+.manager-assign-label {
+  display: block;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.manager-assign-label-text {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--agenta-text);
+  margin-bottom: 0.5rem;
+}
+
+.manager-assign-textarea {
+  width: 100%;
+  max-width: 560px;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--agenta-border);
+  border-radius: 10px;
+  background: var(--agenta-bg-subtle);
+  color: var(--agenta-text);
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 200px;
+  box-sizing: border-box;
+}
+
+.manager-assign-textarea:focus {
+  outline: none;
+  border-color: var(--agenta-accent);
+}
+
+/* Assign tasks page form: consistent layout and spacing */
+.assign-form {
+  max-width: 520px;
+  padding: 0;
+}
+
+.assign-form-label {
+  display: block;
+  margin-bottom: 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--agenta-text);
+}
+
+.assign-form input,
+.assign-form select,
+.assign-form textarea {
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin-top: 0.5rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--agenta-border);
+  border-radius: 10px;
+  background: var(--agenta-bg-subtle);
+  color: var(--agenta-text);
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.assign-form select,
+.assign-form-select {
+  padding-right: 2.5rem;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  background-color: var(--agenta-card-bg);
+  color: var(--agenta-text);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M2 4 L6 8 L10 4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+}
+
+[data-theme="dark"] .assign-form select,
+[data-theme="dark"] .assign-form-select {
+  background-color: var(--agenta-card-bg);
+  color: var(--agenta-text);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='rgba(255,255,255,0.7)' stroke-width='2'%3E%3Cpath d='M2 4 L6 8 L10 4'/%3E%3C/svg%3E");
+}
+
+.assign-form select:hover,
+.assign-form-select:hover {
+  border-color: var(--agenta-border);
+}
+
+.assign-form select option,
+.assign-form-select option {
+  background: var(--agenta-card-bg);
+  color: var(--agenta-text);
+}
+
+.assign-form input:focus,
+.assign-form select:focus,
+.assign-form textarea:focus {
+  outline: none;
+  border-color: var(--agenta-accent);
+}
+
+.assign-form input::placeholder,
+.assign-form textarea::placeholder {
+  color: var(--agenta-text-muted);
+}
+
+.assign-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.assign-form .form-actions {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--agenta-border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.assign-form-label-text {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--agenta-text);
+  margin-bottom: 0.5rem;
+}
+
+.assign-form-tag-input {
+  margin-top: 0.5rem;
+}
+
+.assign-form .tag-input__field {
+  width: 100%;
+  max-width: none;
+}
+
+.assign-form-label--checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  margin-bottom: 1.25rem;
+}
+
+.assign-form-label--checkbox input[type="checkbox"],
+.assign-form input[type="radio"],
+.assign-form input[type="checkbox"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: var(--agenta-accent);
+  border: 2px solid var(--agenta-border);
+  border-radius: 4px;
+  background: var(--agenta-card-bg);
+}
+
+.assign-form input[type="radio"] {
+  border-radius: 50%;
+}
+
+.assign-form-label--checkbox span {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--agenta-text);
+}
+
+.manager-calendar-google-cta {
+  background: var(--agenta-accent-dim);
+  border: 1px solid rgba(201, 112, 112, 0.25);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.manager-calendar-google-text {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--agenta-text);
+}
+
+.manager-calendar-section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 1.25rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--agenta-text);
+}
+
+.manager-calendar-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.manager-calendar-item {
+  padding: 1.25rem 1.5rem;
+  background: var(--agenta-card-bg);
+  border: 1px solid var(--agenta-border);
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.manager-calendar-item:last-child {
+  margin-bottom: 0;
+}
+
+.manager-calendar-item-title {
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  color: var(--agenta-text);
+}
+
+.manager-calendar-item-meta {
+  font-size: 0.85rem;
+  color: var(--agenta-text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.manager-calendar-status {
+  text-transform: capitalize;
+}
+
+.manager-calendar-status--completed {
+  color: #15803d;
+}
+
+[data-theme="dark"] .manager-calendar-status--completed {
+  color: #86efac;
+}
+
+.manager-settings-form {
+  max-width: 420px;
+  margin-top: 0.5rem;
+}
+
+.manager-settings-form label small {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+}
+
+.manager-settings-select {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.6rem 2.25rem 0.6rem 0.9rem;
+  margin-top: 0.35rem;
+  border: 1px solid var(--agenta-border);
+  border-radius: 8px;
+  background: var(--agenta-bg-subtle);
+  color: var(--agenta-text);
+  font-size: 1rem;
+  box-sizing: border-box;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M2 4 L6 8 L10 4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+}
+
+[data-theme="dark"] .manager-settings-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='rgba(255,255,255,0.6)' stroke-width='2'%3E%3Cpath d='M2 4 L6 8 L10 4'/%3E%3C/svg%3E");
+}
+
+.manager-settings-select:hover {
+  border-color: var(--agenta-border);
+}
+
+.manager-settings-select:focus {
+  outline: none;
+  border-color: var(--agenta-accent);
+  background-color: var(--agenta-card-bg);
+}
+
+.manager-settings-select option {
+  background: var(--agenta-card-bg);
+  color: var(--agenta-text);
+}
+
+.manager-settings-saved {
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  color: #15803d;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+[data-theme="dark"] .manager-settings-saved {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #86efac;
+}

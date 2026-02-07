@@ -1,0 +1,216 @@
+.org-hierarchy-flow {
+  min-height: 320px;
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid var(--agenta-border);
+  background: var(--agenta-card-bg);
+}
+
+/* Scroll container: fixed-height viewport; canvas inside can be larger for scrollbars */
+.org-hierarchy-flow__scroll {
+  overflow: auto;
+  width: 100%;
+  border-radius: 14px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--agenta-border) transparent;
+}
+.org-hierarchy-flow__scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.org-hierarchy-flow__scroll::-webkit-scrollbar-track {
+  background: var(--agenta-bg-subtle, rgba(255,255,255,0.04));
+  border-radius: 6px;
+}
+.org-hierarchy-flow__scroll::-webkit-scrollbar-thumb {
+  background: var(--agenta-border);
+  border-radius: 6px;
+}
+.org-hierarchy-flow__scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--agenta-text-muted, rgba(255,255,255,0.4));
+}
+.org-hierarchy-flow__scroll::-webkit-scrollbar-corner {
+  background: var(--agenta-bg-subtle, rgba(255,255,255,0.04));
+  border-radius: 0 0 14px 0;
+}
+
+.org-hierarchy-flow__canvas {
+  position: relative;
+  flex-shrink: 0;
+  display: block;
+}
+
+.org-hierarchy-flow__canvas .react-flow {
+  width: 100%;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  display: block;
+}
+
+.org-hierarchy-flow__empty {
+  height: 100%;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.org-hierarchy-flow__empty-text {
+  color: var(--agenta-text-muted);
+  font-size: 0.9375rem;
+  text-align: center;
+  max-width: 360px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.org-hierarchy-flow__loading {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.org-hierarchy-flow__loading span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--agenta-accent);
+  animation: org-flow-loading 0.6s ease-in-out infinite alternate;
+}
+
+.org-hierarchy-flow__loading span:nth-child(2) { animation-delay: 0.15s; }
+.org-hierarchy-flow__loading span:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes org-flow-loading {
+  from { opacity: 0.4; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.org-flow-container {
+  background: transparent !important;
+}
+
+/* Vertical node: circular avatar on top, name (bold), position (small) below; no background */
+.org-flow-node--vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0;
+  cursor: pointer;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  transition: transform 0.2s;
+}
+
+.org-flow-node--vertical:hover {
+  transform: scale(1.03);
+}
+
+.org-flow-node--vertical:hover .org-flow-node__circle {
+  box-shadow: 0 0 0 2px var(--agenta-accent);
+}
+
+.org-flow-node--root {
+  cursor: default;
+}
+
+.org-flow-node--selected.org-flow-node--vertical .org-flow-node__circle {
+  box-shadow: 0 0 0 2px var(--agenta-accent);
+}
+
+.org-flow-node__circle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--agenta-bg-subtle);
+  transition: box-shadow 0.2s;
+  animation: org-flow-avatar-float 3s ease-in-out infinite;
+}
+
+.org-flow-node__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@keyframes org-flow-avatar-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+.org-flow-node__name {
+  font-weight: 700;
+  font-size: 0.8125rem;
+  color: var(--agenta-text);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+.org-flow-node__role {
+  font-size: 0.6875rem;
+  color: var(--agenta-text-muted);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+.org-flow-handle {
+  width: 6px !important;
+  height: 6px !important;
+  background: var(--agenta-accent) !important;
+  border: none !important;
+  opacity: 0.6;
+}
+
+/* Smoother lines: rounded caps/joins and slight stroke */
+.org-hierarchy-flow .react-flow__edge-path {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Static edge when no tasks */
+.org-flow-edge--idle .react-flow__edge-path {
+  stroke: var(--agenta-text-muted) !important;
+  stroke-width: 1.5;
+  opacity: 0.5;
+  animation: none;
+}
+
+/* Pulsating edge when task(s) assigned – speed scales with task count */
+.org-flow-edge--pulsating .react-flow__edge-path {
+  stroke: var(--agenta-accent) !important;
+  stroke-width: 2;
+  animation: org-flow-pulse var(--pulse-duration, 1.2s) ease-in-out infinite;
+}
+
+.org-flow-edge--speed-1 { --pulse-duration: 1.8s; }
+.org-flow-edge--speed-2 { --pulse-duration: 1.2s; }
+.org-flow-edge--speed-3 { --pulse-duration: 0.9s; }
+.org-flow-edge--speed-4 { --pulse-duration: 0.7s; }
+.org-flow-edge--speed-5 { --pulse-duration: 0.5s; }
+
+@keyframes org-flow-pulse {
+  0%, 100% { opacity: 1; stroke-width: 2; }
+  50% { opacity: 0.6; stroke-width: 2.5; }
+}
+
+.org-flow-container--locked .react-flow__viewport {
+  cursor: default !important;
+}
+
+.org-hierarchy-flow .react-flow__background {
+  background: transparent !important;
+}

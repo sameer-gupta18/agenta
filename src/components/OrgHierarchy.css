@@ -1,0 +1,162 @@
+.org-hierarchy {
+  margin-bottom: 2.5rem;
+}
+
+.org-hierarchy__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+  letter-spacing: -0.02em;
+  color: #f4f4f5;
+}
+
+.org-hierarchy__subtitle {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0 0 1.25rem 0;
+}
+
+.org-hierarchy__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.org-hierarchy__manager-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.org-hierarchy__manager-card {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(145deg, rgba(201, 112, 112, 0.15) 0%, rgba(184, 92, 92, 0.08) 100%);
+  border: 1px solid rgba(201, 112, 112, 0.25);
+  border-radius: 14px;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.org-hierarchy__avatar {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.org-hierarchy__avatar--manager {
+  background: linear-gradient(135deg, var(--agenta-accent) 0%, #b85c5c 100%);
+  box-shadow: 0 2px 12px rgba(201, 112, 112, 0.4);
+}
+
+.org-hierarchy__avatar--employee {
+  width: 38px;
+  height: 38px;
+  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.org-hierarchy__manager-info,
+.org-hierarchy__employee-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.org-hierarchy__manager-info .org-hierarchy__role {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(167, 139, 250, 0.9);
+}
+
+.org-hierarchy__name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #f4f4f5;
+}
+
+.org-hierarchy__email {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.org-hierarchy__wires {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-left: 0.5rem;
+}
+
+.org-hierarchy__wire-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.org-hierarchy__wire {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  margin-top: -4px;
+  color: rgba(255, 255, 255, 0.18);
+}
+
+.org-hierarchy__wire--assigned {
+  color: rgba(34, 197, 94, 0.85);
+}
+
+.org-hierarchy__wire--unassigned .org-hierarchy__wire-svg path {
+  stroke-dasharray: 4 3;
+}
+
+.org-hierarchy__wire-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.org-hierarchy__employee-card {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.6rem 0.85rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  flex: 1;
+  min-width: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.org-hierarchy__employee-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.org-hierarchy__badge {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(34, 197, 94, 0.9);
+  margin-top: 0.1rem;
+}
+
+.org-hierarchy__empty {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0.5rem 0 0 0.5rem;
+}

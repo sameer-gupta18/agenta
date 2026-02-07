@@ -1,0 +1,75 @@
+{"location":"create-god-admin.js:top","message":"script started","data":{"argv":2,"hasAdminEmail":false,"hasAdminPassword":false,"hasCredsEnv":false},"timestamp":1770476329362,"hypothesisId":"B"}
+{"location":"create-god-admin.js:top","message":"script started","data":{"argv":2,"hasAdminEmail":false,"hasAdminPassword":false,"hasCredsEnv":false},"timestamp":1770476407612,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"main entered","data":{"cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff"},"timestamp":1770476407669,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"env check","data":{"hasEmail":false,"hasPassword":false,"passwordLen":0},"timestamp":1770476407710,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"exit: missing env","data":{},"timestamp":1770476407746,"hypothesisId":"B"}
+{"location":"create-god-admin.js:top","message":"script started","data":{"argv":2,"hasAdminEmail":false,"hasAdminPassword":false,"hasCredsEnv":false},"timestamp":1770476433914,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"main entered","data":{"cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff"},"timestamp":1770476433960,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"env check","data":{"hasEmail":false,"hasPassword":false,"passwordLen":0},"timestamp":1770476433989,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"exit: missing env","data":{},"timestamp":1770476433993,"hypothesisId":"B"}
+{"location":"create-god-admin.js:top","message":"script started","data":{"argv":2,"hasAdminEmail":true,"hasAdminPassword":true,"hasCredsEnv":true},"timestamp":1770476557315,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"main entered","data":{"cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff"},"timestamp":1770476557361,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"env check","data":{"hasEmail":true,"hasPassword":true,"passwordLen":11},"timestamp":1770476557399,"hypothesisId":"B"}
+{"location":"create-god-admin.js:getCredentials","message":"getCredentials result","data":{"hasKeyPath":true,"keyPathLength":59},"timestamp":1770476557402,"hypothesisId":"A"}
+{"location":"create-god-admin.js:main","message":"before read key","data":{"resolved":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff\\src\\lib\\swarm-staff-firebase-adminsdk-fbsvc-3dcc22d355.json","cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff","keyPathRaw":"src\\lib\\swarm-staff-firebase-adminsdk-fbsvc-3dcc22d355.json"},"timestamp":1770476557406,"hypothesisId":"A"}
+{"location":"create-god-admin.js:main","message":"before init app","data":{"keyHasProjectId":true},"timestamp":1770476557409,"hypothesisId":"C"}
+{"location":"create-god-admin.js:main","message":"before auth.getUserByEmail","data":{"emailSet":true},"timestamp":1770476558349,"hypothesisId":"D"}
+{"location":"create-god-admin.js:main","message":"main entered","data":{"cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff"},"timestamp":1770476557363,"hypothesisId":"B"}
+{"location":"create-god-admin.js:getCredentials","message":"getCredentials result","data":{"hasKeyPath":true,"keyPathLength":59},"timestamp":1770476557405,"hypothesisId":"A"}
+{"location":"create-god-admin.js:main","message":"before read key","data":{"resolved":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff\\src\\lib\\swarm-staff-firebase-adminsdk-fbsvc-3dcc22d355.json","cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff","keyPathRaw":"src\\lib\\swarm-staff-firebase-adminsdk-fbsvc-3dcc22d355.json"},"timestamp":1770476557408,"hypothesisId":"A"}
+{"location":"create-god-admin.js:main","message":"before init app","data":{"keyHasProjectId":true},"timestamp":1770476557410,"hypothesisId":"C"}
+{"location":"create-god-admin.js:main","message":"before auth.getUserByEmail","data":{"emailSet":true},"timestamp":1770476558350,"hypothesisId":"D"}
+{"location":"create-god-admin.js:main","message":"env check","data":{"hasEmail":true,"hasPassword":true,"passwordLen":11},"timestamp":1770476557401,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"auth catch","data":{"code":"auth/configuration-not-found","message":"There is no configuration corresponding to the provided identifier."},"timestamp":1770476558747,"hypothesisId":"D"}
+{"location":"create-god-admin.js:main.catch","message":"main() rejected","data":{"message":"There is no configuration corresponding to the provided identifier.","code":"auth/configuration-not-found"},"timestamp":1770476558752,"hypothesisId":"D"}
+{"location":"create-god-admin.js:top","message":"script started","data":{"argv":2,"hasAdminEmail":false,"hasAdminPassword":false,"hasCredsEnv":false},"timestamp":1770476607482,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"main entered","data":{"cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff"},"timestamp":1770476607547,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"env check","data":{"hasEmail":false,"hasPassword":false,"passwordLen":0},"timestamp":1770476607586,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"exit: missing env","data":{},"timestamp":1770476607590,"hypothesisId":"B"}
+{"location":"create-god-admin.js:top","message":"script started","data":{"argv":2,"hasAdminEmail":true,"hasAdminPassword":true,"hasCredsEnv":true},"timestamp":1770476672238,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"main entered","data":{"cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff"},"timestamp":1770476672334,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"env check","data":{"hasEmail":true,"hasPassword":true,"passwordLen":11},"timestamp":1770476672520,"hypothesisId":"B"}
+{"location":"create-god-admin.js:getCredentials","message":"getCredentials result","data":{"hasKeyPath":true,"keyPathLength":59},"timestamp":1770476672521,"hypothesisId":"A"}
+{"location":"create-god-admin.js:main","message":"before read key","data":{"resolved":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff\\src\\lib\\swarm-staff-firebase-adminsdk-fbsvc-3dcc22d355.json","cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff","keyPathRaw":"src\\lib\\swarm-staff-firebase-adminsdk-fbsvc-3dcc22d355.json"},"timestamp":1770476672522,"hypothesisId":"A"}
+{"location":"create-god-admin.js:main","message":"before init app","data":{"keyHasProjectId":true},"timestamp":1770476672524,"hypothesisId":"C"}
+{"location":"create-god-admin.js:main","message":"before auth.getUserByEmail","data":{"emailSet":true},"timestamp":1770476673275,"hypothesisId":"D"}
+{"location":"create-god-admin.js:main","message":"main entered","data":{"cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff"},"timestamp":1770476672335,"hypothesisId":"B"}
+{"location":"create-god-admin.js:getCredentials","message":"getCredentials result","data":{"hasKeyPath":true,"keyPathLength":59},"timestamp":1770476672522,"hypothesisId":"A"}
+{"location":"create-god-admin.js:main","message":"before read key","data":{"resolved":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff\\src\\lib\\swarm-staff-firebase-adminsdk-fbsvc-3dcc22d355.json","cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff","keyPathRaw":"src\\lib\\swarm-staff-firebase-adminsdk-fbsvc-3dcc22d355.json"},"timestamp":1770476672523,"hypothesisId":"A"}
+{"location":"create-god-admin.js:main","message":"before init app","data":{"keyHasProjectId":true},"timestamp":1770476672524,"hypothesisId":"C"}
+{"location":"create-god-admin.js:main","message":"before auth.getUserByEmail","data":{"emailSet":true},"timestamp":1770476673276,"hypothesisId":"D"}
+{"location":"create-god-admin.js:main","message":"env check","data":{"hasEmail":true,"hasPassword":true,"passwordLen":11},"timestamp":1770476672520,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"auth catch","data":{"code":"auth/configuration-not-found","message":"There is no configuration corresponding to the provided identifier."},"timestamp":1770476673669,"hypothesisId":"D"}
+{"location":"create-god-admin.js:top","message":"script started","data":{"argv":2,"hasAdminEmail":false,"hasAdminPassword":false,"hasCredsEnv":false},"timestamp":1770476713308,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"main entered","data":{"cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff"},"timestamp":1770476713357,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"env check","data":{"hasEmail":true,"hasPassword":true,"passwordLen":11},"timestamp":1770476713389,"hypothesisId":"B"}
+{"location":"create-god-admin.js:getCredentials","message":"getCredentials result","data":{"hasKeyPath":true,"keyPathLength":59},"timestamp":1770476713393,"hypothesisId":"A"}
+{"location":"create-god-admin.js:main","message":"before read key","data":{"resolved":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff\\src\\lib\\swarm-staff-firebase-adminsdk-fbsvc-3dcc22d355.json","cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff","keyPathRaw":"src\\lib\\swarm-staff-firebase-adminsdk-fbsvc-3dcc22d355.json"},"timestamp":1770476713397,"hypothesisId":"A"}
+{"location":"create-god-admin.js:main","message":"before init app","data":{"keyHasProjectId":true},"timestamp":1770476713399,"hypothesisId":"C"}
+{"location":"create-god-admin.js:main","message":"before auth.getUserByEmail","data":{"emailSet":true},"timestamp":1770476713985,"hypothesisId":"D"}
+{"location":"create-god-admin.js:main","message":"main entered","data":{"cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff"},"timestamp":1770476713359,"hypothesisId":"B"}
+{"location":"create-god-admin.js:getCredentials","message":"getCredentials result","data":{"hasKeyPath":true,"keyPathLength":59},"timestamp":1770476713395,"hypothesisId":"A"}
+{"location":"create-god-admin.js:main","message":"before read key","data":{"resolved":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff\\src\\lib\\swarm-staff-firebase-adminsdk-fbsvc-3dcc22d355.json","cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff","keyPathRaw":"src\\lib\\swarm-staff-firebase-adminsdk-fbsvc-3dcc22d355.json"},"timestamp":1770476713398,"hypothesisId":"A"}
+{"location":"create-god-admin.js:main","message":"before init app","data":{"keyHasProjectId":true},"timestamp":1770476713400,"hypothesisId":"C"}
+{"location":"create-god-admin.js:main","message":"before auth.getUserByEmail","data":{"emailSet":true},"timestamp":1770476713987,"hypothesisId":"D"}
+{"location":"create-god-admin.js:main","message":"env check","data":{"hasEmail":true,"hasPassword":true,"passwordLen":11},"timestamp":1770476713391,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"auth catch","data":{"code":"auth/configuration-not-found","message":"There is no configuration corresponding to the provided identifier."},"timestamp":1770476714415,"hypothesisId":"D"}
+{"location":"create-god-admin.js:top","message":"script started","data":{"argv":2,"hasAdminEmail":false,"hasAdminPassword":false,"hasCredsEnv":false},"timestamp":1770476759407,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"main entered","data":{"cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff"},"timestamp":1770476759457,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"env check","data":{"hasEmail":true,"hasPassword":true,"passwordLen":11},"timestamp":1770476759498,"hypothesisId":"B"}
+{"location":"create-god-admin.js:getCredentials","message":"getCredentials result","data":{"hasKeyPath":true,"keyPathLength":59},"timestamp":1770476759501,"hypothesisId":"A"}
+{"location":"create-god-admin.js:main","message":"before read key","data":{"resolved":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff\\src\\lib\\swarm-staff-firebase-adminsdk-fbsvc-3dcc22d355.json","cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff","keyPathRaw":"src\\lib\\swarm-staff-firebase-adminsdk-fbsvc-3dcc22d355.json"},"timestamp":1770476759503,"hypothesisId":"A"}
+{"location":"create-god-admin.js:main","message":"before init app","data":{"keyHasProjectId":true},"timestamp":1770476759505,"hypothesisId":"C"}
+{"location":"create-god-admin.js:main","message":"before auth.getUserByEmail","data":{"emailSet":true},"timestamp":1770476760085,"hypothesisId":"D"}
+{"location":"create-god-admin.js:main","message":"main entered","data":{"cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff"},"timestamp":1770476759458,"hypothesisId":"B"}
+{"location":"create-god-admin.js:main","message":"env check","data":{"hasEmail":true,"hasPassword":true,"passwordLen":11},"timestamp":1770476759499,"hypothesisId":"B"}
+{"location":"create-god-admin.js:getCredentials","message":"getCredentials result","data":{"hasKeyPath":true,"keyPathLength":59},"timestamp":1770476759502,"hypothesisId":"A"}
+{"location":"create-god-admin.js:main","message":"before read key","data":{"resolved":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff\\src\\lib\\swarm-staff-firebase-adminsdk-fbsvc-3dcc22d355.json","cwd":"C:\\Users\\PC\\Desktop\\Coding\\swarm-staff","keyPathRaw":"src\\lib\\swarm-staff-firebase-adminsdk-fbsvc-3dcc22d355.json"},"timestamp":1770476759504,"hypothesisId":"A"}
+{"location":"create-god-admin.js:main","message":"before init app","data":{"keyHasProjectId":true},"timestamp":1770476759506,"hypothesisId":"C"}
+{"location":"create-god-admin.js:main","message":"before auth.getUserByEmail","data":{"emailSet":true},"timestamp":1770476760085,"hypothesisId":"D"}
+{"location":"create-god-admin.js:main","message":"auth catch","data":{"code":"auth/user-not-found","message":"There is no user record corresponding to the provided identifier."},"timestamp":1770476760492,"hypothesisId":"D"}
+{"location":"create-god-admin.js:main","message":"auth catch","data":{"code":"auth/user-not-found","message":"There is no user record corresponding to the provided identifier."},"timestamp":1770476760494,"hypothesisId":"D"}
+{"location":"create-god-admin.js:main","message":"auth branch created user","data":{"uid":"6Ix1k1WgoWWcQ7pl7lsDnaL7DuI3"},"timestamp":1770476761388,"hypothesisId":"D"}
+{"location":"create-god-admin.js:main","message":"before Firestore set","data":{"uid":"6Ix1k1WgoWWcQ7pl7lsDnaL7DuI3"},"timestamp":1770476761394,"hypothesisId":"E"}
+{"location":"create-god-admin.js:main","message":"auth branch created user","data":{"uid":"6Ix1k1WgoWWcQ7pl7lsDnaL7DuI3"},"timestamp":1770476761390,"hypothesisId":"D"}
+{"location":"create-god-admin.js:main","message":"before Firestore set","data":{"uid":"6Ix1k1WgoWWcQ7pl7lsDnaL7DuI3"},"timestamp":1770476761396,"hypothesisId":"E"}

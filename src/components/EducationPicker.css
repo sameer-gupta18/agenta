@@ -1,0 +1,191 @@
+/* Education picker: match form input styling and consistent layout */
+.education-picker {
+  --ep-border: rgba(255, 255, 255, 0.12);
+  --ep-bg: rgba(255, 255, 255, 0.06);
+  --ep-focus: var(--agenta-accent);
+  --ep-focus-bg: var(--agenta-accent-dim);
+}
+.admin-dash .education-picker {
+  --ep-border: var(--agenta-border);
+  --ep-bg: var(--agenta-bg-subtle);
+  --ep-focus: var(--agenta-accent);
+  --ep-focus-bg: var(--agenta-accent-dim);
+}
+
+.education-picker__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+}
+
+.education-picker__row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding: 0.5rem 0.6rem;
+  background: var(--ep-bg);
+  border: 1px solid var(--ep-border);
+  border-radius: 10px;
+}
+
+.education-picker__degree {
+  padding: 0.5rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--ep-border);
+  background: var(--ep-bg);
+  color: var(--agenta-text, #fff);
+  font-size: 0.9rem;
+  min-width: 130px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.education-picker__degree:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.education-picker__degree:focus {
+  outline: none;
+  border-color: var(--ep-focus);
+  background: var(--ep-focus-bg);
+}
+
+.education-picker__school-label {
+  flex: 1;
+  min-width: 100px;
+  font-size: 0.9rem;
+  color: var(--agenta-text-muted, rgba(255, 255, 255, 0.7));
+}
+
+.education-picker__remove {
+  padding: 0.4rem;
+  border: none;
+  background: transparent;
+  color: var(--agenta-text-muted);
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s, color 0.2s;
+}
+.education-picker__remove:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
+.education-picker__add {
+  margin-top: 0.25rem;
+}
+
+.education-picker__add-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding: 0.6rem;
+  background: var(--ep-bg);
+  border: 1px solid var(--ep-border);
+  border-radius: 10px;
+  transition: border-color 0.2s;
+}
+.education-picker__add-inner:focus-within {
+  border-color: var(--ep-focus);
+  box-shadow: 0 0 0 1px var(--ep-focus);
+}
+
+.education-picker__degree--add {
+  min-width: 130px;
+}
+
+.education-picker__school-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.education-picker__school-input {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--ep-border);
+  background: var(--ep-bg);
+  color: var(--agenta-text, #fff);
+  font-size: 0.95rem;
+  transition: border-color 0.2s, background 0.2s;
+  box-sizing: border-box;
+}
+.education-picker__school-input::placeholder {
+  color: var(--agenta-text-muted, rgba(255, 255, 255, 0.4));
+}
+.education-picker__school-input:focus {
+  outline: none;
+  border-color: var(--ep-focus);
+  background: var(--ep-focus-bg);
+}
+
+.education-picker__suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 0.25rem 0 0;
+  padding: 0.35rem 0;
+  list-style: none;
+  /* Opaque background so dropdown does not show content underneath */
+  background: #1a1a24;
+  border: 1px solid var(--ep-border);
+  border-radius: 10px;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 20;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+[data-theme="light"] .education-picker__suggestions {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.education-picker__suggestion {
+  padding: 0.55rem 0.85rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.15s;
+  background: transparent;
+}
+.education-picker__suggestion:hover,
+.education-picker__suggestion--focused {
+  /* Opaque hover so content underneath is not visible */
+  background: #252538;
+}
+[data-theme="light"] .education-picker__suggestion:hover,
+[data-theme="light"] .education-picker__suggestion--focused {
+  background: #e8e7f4;
+}
+
+.education-picker__loading {
+  font-size: 0.8rem;
+  color: var(--agenta-text-muted);
+  margin-left: 0.5rem;
+}
+
+.education-picker__add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(135deg, var(--agenta-accent) 0%, #b85c5c 100%);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.education-picker__add-btn:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
+}
+.education-picker__add-btn:active {
+  transform: translateY(0);
+}

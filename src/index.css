@@ -1,10 +1,36 @@
+:root,
+[data-theme="dark"] {
+  --agenta-bg: #0a0a0f;
+  --agenta-bg-subtle: rgba(255, 255, 255, 0.06);
+  --agenta-card-bg: rgba(255, 255, 255, 0.04);
+  --agenta-border: rgba(255, 255, 255, 0.08);
+  --agenta-text: #f4f4f5;
+  --agenta-text-muted: rgba(255, 255, 255, 0.6);
+  --agenta-accent: #c97070;
+  --agenta-accent-dim: rgba(201, 112, 112, 0.2);
+  --agenta-error: #fca5a5;
+}
+
+[data-theme="light"] {
+  --agenta-bg: #f8f9fb;
+  --agenta-bg-subtle: rgba(0, 0, 0, 0.04);
+  --agenta-card-bg: #ffffff;
+  --agenta-border: rgba(0, 0, 0, 0.1);
+  --agenta-text: #1a1a1f;
+  --agenta-text-muted: rgba(0, 0, 0, 0.7);
+  --agenta-accent: #b85c5c;
+  --agenta-accent-dim: rgba(184, 92, 92, 0.15);
+  --agenta-error: #dc2626;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: var(--agenta-bg);
+  color: var(--agenta-text);
 }
 
 code {
