@@ -708,6 +708,7 @@ export function ManagerAssign() {
               type="checkbox"
               checked={newProject.trainingForLowerLevel ?? false}
               onChange={(e) => setNewProject({ ...newProject, trainingForLowerLevel: e.target.checked })}
+              id = "#checkbox-manager-submit"
             />
             <span>Can be used as training for lower-level employees</span>
           </label>
