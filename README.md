@@ -1,4 +1,4 @@
-# Swarm Staff
+# Agenta
 
 A TypeScript web app for managers and employees. Managers create project assignments; a middlemen AI (or fallback scoring) picks the best-suited employee. Built with React, Effect, and Firebase (Auth + Firestore).
 
