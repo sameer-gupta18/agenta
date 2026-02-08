@@ -13,7 +13,20 @@ import { ManagerTeamMember } from "./pages/ManagerTeamMember";
 import { ManagerCalendar } from "./pages/ManagerCalendar";
 import { ManagerSettings } from "./pages/ManagerSettings";
 import { ManagerAssign } from "./pages/ManagerAssign";
+import { ManagerAssignmentDetail } from "./pages/ManagerAssignmentDetail";
+import { ManagerCompleted } from "./pages/ManagerCompleted";
+import { ManagerRequests } from "./pages/ManagerRequests";
+import { ManagerMyManagerDetail } from "./pages/ManagerMyManagerDetail";
+import { ManagerMyRequests } from "./pages/ManagerMyRequests";
+import { CalendarOAuthCallback } from "./pages/CalendarOAuthCallback";
+import { EmployeeLayout } from "./layouts/EmployeeLayout";
 import { EmployeeDashboard } from "./pages/EmployeeDashboard";
+import { EmployeeTeam } from "./pages/EmployeeTeam";
+import { EmployeeCalendar } from "./pages/EmployeeCalendar";
+import { EmployeeProfile } from "./pages/EmployeeProfile";
+import { EmployeeRequests } from "./pages/EmployeeRequests";
+import { EmployeeAssignmentDetail } from "./pages/EmployeeAssignmentDetail";
+import { EmployeeManagerDetail } from "./pages/EmployeeManagerDetail";
 import "./App.css";
 
 function redirectForRole(role: string): string {
@@ -54,6 +67,7 @@ function App() {
           <Route path="/" element={<HomeRedirect />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/calendar-oauth-callback" element={<CalendarOAuthCallback />} />
           <Route
             path="/admin"
             element={
@@ -79,20 +93,33 @@ function App() {
             }
           >
             <Route index element={<ManagerDashboard />} />
+            <Route path="my-manager" element={<ManagerMyManagerDetail />} />
             <Route path="team" element={<ManagerTeam />} />
             <Route path="team/:uid" element={<ManagerTeamMember />} />
             <Route path="calendar" element={<ManagerCalendar />} />
+            <Route path="completed" element={<ManagerCompleted />} />
+            <Route path="requests" element={<ManagerRequests />} />
+            <Route path="my-requests" element={<ManagerMyRequests />} />
             <Route path="settings" element={<ManagerSettings />} />
             <Route path="assign" element={<ManagerAssign />} />
+            <Route path="assignment/:id" element={<ManagerAssignmentDetail />} />
           </Route>
           <Route
             path="/employee"
             element={
               <ProtectedRoute role="employee">
-                <EmployeeDashboard />
+                <EmployeeLayout />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route index element={<EmployeeDashboard />} />
+            <Route path="manager" element={<EmployeeManagerDetail />} />
+            <Route path="team" element={<EmployeeTeam />} />
+            <Route path="calendar" element={<EmployeeCalendar />} />
+            <Route path="profile" element={<EmployeeProfile />} />
+            <Route path="requests" element={<EmployeeRequests />} />
+            <Route path="assignment/:id" element={<EmployeeAssignmentDetail />} />
+          </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AuthProvider>

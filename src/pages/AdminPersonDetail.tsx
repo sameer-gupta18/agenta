@@ -6,7 +6,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { FirestoreService, runWithAppLayer } from "../lib/effect";
 import type { ManagerRecord, EmployeeProfile, Role, ProjectAssignment } from "../types";
 import { DEFAULT_SKILL_ELO } from "../lib/skillElo";
-import { FiArrowLeft, FiUser, FiBook, FiBriefcase, FiUserPlus, FiCheckSquare, FiAward } from "react-icons/fi";
+import { FiArrowLeft, FiUser, FiBook, FiBriefcase, FiUserPlus, FiCheckSquare, FiAward, FiAlertTriangle } from "react-icons/fi";
 import "./AdminPersonDetail.css";
 
 function getAvatarUrl(seed: string): string {
@@ -25,6 +25,9 @@ export function AdminPersonDetail() {
   const [error, setError] = useState<string | null>(null);
   const [promoting, setPromoting] = useState(false);
   const [promoteError, setPromoteError] = useState<string | null>(null);
+  const [showFireConfirm, setShowFireConfirm] = useState(false);
+  const [firing, setFiring] = useState(false);
+  const [fireError, setFireError] = useState<string | null>(null);
 
   const load = useCallback(() => {
     if (!uid) return;
@@ -133,6 +136,26 @@ export function AdminPersonDetail() {
     }
   };
 
+  const handleFirePerson = async () => {
+    if (!uid || !authUser || uid === authUser.uid) return;
+    setFireError(null);
+    setFiring(true);
+    try {
+      const { getFunctions, httpsCallable } = await import("firebase/functions");
+      const { getFirebaseApp } = await import("../config/firebase");
+      const fn = getFunctions(getFirebaseApp());
+      const firePerson = httpsCallable<{ uid: string }, { ok: boolean }>(fn, "firePerson");
+      await firePerson({ uid });
+      setShowFireConfirm(false);
+      navigate("/admin", { replace: true });
+    } catch (err: unknown) {
+      const msg = err && typeof err === "object" && "message" in err ? String((err as { message: string }).message) : "Failed to remove person.";
+      setFireError(msg);
+    } finally {
+      setFiring(false);
+    }
+  };
+
   return (
     <div className="person-detail">
       <motion.button
@@ -178,9 +201,41 @@ export function AdminPersonDetail() {
                 </button>
               </div>
             )}
+            {uid !== authUser?.uid && (
+              <div className="person-detail__fire-wrap" style={{ marginTop: "0.75rem" }}>
+                <button
+                  type="button"
+                  className="person-detail__fire-btn"
+                  onClick={() => setShowFireConfirm(true)}
+                  style={{ color: "var(--error, #c00)", borderColor: "var(--error, #c00)" }}
+                >
+                  {React.createElement(FiAlertTriangle as any)} Remove from system
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </motion.header>
+
+      {showFireConfirm && (
+        <div className="modal-overlay" onClick={() => !firing && setShowFireConfirm(false)} role="presentation">
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} role="dialog">
+            <h3>Remove from system</h3>
+            <p className="muted">
+              Are you sure you want to remove {displayName}? They will be deleted from authentication and will no longer have access. This cannot be undone.
+            </p>
+            {fireError && <p className="dash-error" style={{ marginTop: "0.75rem" }}>{fireError}</p>}
+            <div className="form-actions" style={{ marginTop: "1rem" }}>
+              <button type="button" className="btn-primary" onClick={handleFirePerson} disabled={firing} style={{ background: "var(--error, #c00)" }}>
+                {firing ? "Removing…" : "Remove"}
+              </button>
+              <button type="button" className="btn-secondary" onClick={() => setShowFireConfirm(false)} disabled={firing}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="person-detail__grid">
         {activeAssignments.length > 0 && (

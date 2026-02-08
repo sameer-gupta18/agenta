@@ -12,6 +12,7 @@
     "@types/react": "^19.2.13",
     "@types/react-dom": "^19.2.3",
     "@xyflow/react": "^12.10.0",
+    "canvas-confetti": "^1.9.4",
     "effect": "^3.19.16",
     "firebase": "^12.9.0",
     "framer-motion": "^12.33.0",
@@ -30,6 +31,7 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
     "firebase-admin": "^12.0.0"
   },
   "scripts": {
@@ -43,6 +45,8 @@
     "seed-realistic-skill-ratings": "node scripts/seed-realistic-skill-ratings.js",
     "seed-assignment-fields": "node scripts/seed-assignment-fields.js",
     "seed-varied-data": "node scripts/seed-varied-data.js",
+    "seed-alex-rivera-tasks": "node scripts/seed-alex-rivera-tasks.js",
+    "update-alex-rivera-dates": "node scripts/update-alex-rivera-dates.js",
     "fix-manager-cycles": "node scripts/fix-manager-cycles.js"
   },
   "eslintConfig": {

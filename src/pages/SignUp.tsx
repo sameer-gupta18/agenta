@@ -16,7 +16,7 @@ import "./Login.css";
 
 /**
  * Sign-up is only for managers with a valid admin-created invite link.
- * Employees cannot sign up; managers create their accounts from the manager dashboard.
+ * Employees are added by their manager from the Add employee page.
  */
 function SignUpForm() {
   const navigate = useNavigate();
@@ -162,6 +162,7 @@ function SignUpForm() {
   const showForm = isManagerSignup && managerInviteToken && managerInviteValid === true;
 
   if (!showForm) {
+    const checking = isManagerSignup && managerInviteToken && managerInviteValid === null;
     return (
       <div className="login-page">
         <div className="login-card">
@@ -170,12 +171,18 @@ function SignUpForm() {
             <p>Account creation</p>
           </div>
           <div className="login-form">
-            <p className="muted" style={{ marginBottom: "1rem", textAlign: "center" }}>
-              You cannot create an account here. Manager accounts are created by an administrator (use the invite link they provide). Employee accounts are created by your manager—they set your email and password.
-            </p>
-            <p className="login-footer" style={{ marginTop: "1rem" }}>
-              <a href="/login">Sign in</a> if you already have credentials.
-            </p>
+            {checking ? (
+              <p className="muted" style={{ textAlign: "center" }}>Checking invite…</p>
+            ) : (
+              <>
+                <p className="muted" style={{ marginBottom: "1rem", textAlign: "center" }}>
+                  Use an invite link from your admin or manager to create an account.
+                </p>
+                <p className="login-footer" style={{ marginTop: "1rem" }}>
+                  <a href="/login">Sign in</a> if you already have credentials.
+                </p>
+              </>
+            )}
           </div>
         </div>
       </div>

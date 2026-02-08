@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 import { Effect } from "effect";
 import { useAuth } from "../contexts/AuthContext";
 import { FirestoreService, runWithAppLayer } from "../lib/effect";
@@ -10,43 +11,31 @@ import {
   getEventDateKey,
   type GoogleCalendarEvent,
 } from "../lib/googleCalendar";
-import { FiCalendar, FiClock, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiCalendar, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import "./ManagerDashboard.css";
 import "./ManagerCalendar.css";
 
-type DeadlineKind = "mine" | "subordinate";
-
 type CalendarEventItem =
-  | { type: "deadline"; assignment: ProjectAssignment; dateKey: string; deadlineKind: DeadlineKind }
+  | { type: "deadline"; assignment: ProjectAssignment; dateKey: string }
   | { type: "google"; event: GoogleCalendarEvent; dateKey: string };
-
-function getMonthRange(year: number, month: number): { timeMin: Date; timeMax: Date } {
-  const timeMin = new Date(year, month, 1, 0, 0, 0);
-  const timeMax = new Date(year, month + 1, 0, 23, 59, 59);
-  return { timeMin, timeMax };
-}
 
 function dateToKey(d: Date): string {
   return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
 }
 
-/** Parse timeline string like "2025-02-14" or "02/14/2025" to a Date. Returns null for "ASAP" or invalid. */
 function parseTimelineAsDate(timeline: string): Date | null {
   const s = (timeline || "").trim();
   if (!s) return null;
-  // YYYY-MM-DD (ISO)
   if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
     const d = new Date(s + "T12:00:00");
     return isNaN(d.getTime()) ? null : d;
   }
-  // MM/DD/YYYY or M/D/YYYY
   const slashMatch = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
   if (slashMatch) {
     const [, month, day, year] = slashMatch;
     const d = new Date(Number(year), Number(month) - 1, Number(day), 12, 0, 0);
     return isNaN(d.getTime()) ? null : d;
   }
-  // DD-MM-YYYY
   const dashMatch = s.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
   if (dashMatch) {
     const [, day, month, year] = dashMatch;
@@ -56,28 +45,30 @@ function parseTimelineAsDate(timeline: string): Date | null {
   return null;
 }
 
-/** Get a date key for an assignment: from deadline (ms) or parseable timeline. Returns null if no date. */
 function getAssignmentDateKey(a: ProjectAssignment): string | null {
   if (a.deadline != null && a.deadline > 0) return dateToKey(new Date(a.deadline));
   const parsed = parseTimelineAsDate(a.timeline);
   return parsed ? dateToKey(parsed) : null;
 }
 
-/** Get sortable timestamp for an assignment (deadline or parsed timeline). */
 function getAssignmentDateMs(a: ProjectAssignment): number {
   if (a.deadline != null && a.deadline > 0) return a.deadline;
   const parsed = parseTimelineAsDate(a.timeline);
   return parsed ? parsed.getTime() : 0;
 }
 
-/** Date key for first day of a given month (for undated assignments). */
 function firstDayOfMonthKey(year: number, month: number): string {
   return year + "-" + String(month + 1).padStart(2, "0") + "-01";
 }
 
-export function ManagerCalendar() {
+function getMonthRange(year: number, month: number): { timeMin: Date; timeMax: Date } {
+  const timeMin = new Date(year, month, 1, 0, 0, 0);
+  const timeMax = new Date(year, month + 1, 0, 23, 59, 59);
+  return { timeMin, timeMax };
+}
+
+export function EmployeeCalendar() {
   const { user } = useAuth();
-  const [assignmentsByMe, setAssignmentsByMe] = useState<ProjectAssignment[]>([]);
   const [assignedToMe, setAssignedToMe] = useState<ProjectAssignment[]>([]);
   const [googleEvents, setGoogleEvents] = useState<GoogleCalendarEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -96,16 +87,11 @@ export function ManagerCalendar() {
     setLoading(true);
     const program = Effect.gen(function* () {
       const fs = yield* FirestoreService;
-      const byMe = yield* fs.getAssignmentsByManager(user.uid);
-      const toMe = yield* fs.getAssignmentsAssignedTo(user.uid);
-      return { byMe, toMe };
+      return yield* fs.getAssignmentsAssignedTo(user.uid);
     });
     Effect.runPromise(runWithAppLayer(program))
-      .then(({ byMe, toMe }) => {
-        setAssignmentsByMe(byMe ?? []);
-        setAssignedToMe(toMe ?? []);
-      })
-      .catch(() => {})
+      .then((toMe) => setAssignedToMe(toMe ?? []))
+      .catch(() => setAssignedToMe([]))
       .finally(() => setLoading(false));
   }, [user?.uid]);
 
@@ -153,22 +139,15 @@ export function ManagerCalendar() {
       .finally(() => setGoogleLoading(false));
   }, [viewYear, viewMonth, googleAccessToken]);
 
-  /* Completed assignments excluded; visible only on Completed tasks page */
-  const activeByMe = assignmentsByMe.filter((a) => a.status !== "completed");
-  const activeToMe = assignedToMe.filter((a) => a.status !== "completed");
-  const allActiveAssignments = [...activeByMe, ...activeToMe].filter(
-    (a, i, arr) => arr.findIndex((x) => x.id === a.id) === i
-  );
-  const sortedAssignments = [...allActiveAssignments].sort((a, b) => getAssignmentDateMs(a) - getAssignmentDateMs(b));
+  const activeTasks = assignedToMe.filter((a) => a.status !== "completed");
+  const sortedAssignments = [...activeTasks].sort((a, b) => getAssignmentDateMs(a) - getAssignmentDateMs(b));
+  const fallbackDateKey = firstDayOfMonthKey(viewYear, viewMonth);
 
   const eventsByDate = new Map<string, CalendarEventItem[]>();
-  const fallbackDateKey = firstDayOfMonthKey(viewYear, viewMonth);
   sortedAssignments.forEach((a) => {
-    if (!user?.uid) return;
     const dateKey = getAssignmentDateKey(a) ?? fallbackDateKey;
-    const deadlineKind: DeadlineKind = a.assignedTo === user.uid ? "mine" : "subordinate";
     const list = eventsByDate.get(dateKey) ?? [];
-    list.push({ type: "deadline", assignment: a, dateKey, deadlineKind });
+    list.push({ type: "deadline", assignment: a, dateKey });
     eventsByDate.set(dateKey, list);
   });
   googleEvents.forEach((ev) => {
@@ -209,36 +188,23 @@ export function ManagerCalendar() {
   return (
     <div className="manager-dash manager-dash--page">
       <h1 className="manager-page-title">
-        {React.createElement(FiCalendar as any)} Manager&apos;s calendar
+        {React.createElement(FiCalendar as any)} My calendar
       </h1>
       <p className="muted" style={{ marginBottom: "1rem" }}>
-        Your deadlines and events.
+        Your tasks and events.
       </p>
 
       {isGoogleCalendarOAuthConfigured() && (
-        <div className={`manager-calendar-google-connect${googleAccessToken ? " manager-calendar-google-connect--connected" : ""}`}>
+        <div className={`manager-calendar-google-connect${googleAccessToken ? " manager-calendar-google-connect--connected" : ""}`} style={{ marginBottom: "1.5rem" }}>
           <div className="manager-calendar-google-connect__content">
-            <div className="manager-calendar-google-connect__icon" aria-hidden>
-              {googleAccessToken ? (
-                React.createElement(FiCalendar as any, { style: { width: 20, height: 20 } })
-              ) : (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                </svg>
-              )}
-            </div>
+            <div className="manager-calendar-google-connect__icon" aria-hidden>{React.createElement(FiCalendar as any, { style: { width: 20, height: 20 } })}</div>
             <p className="manager-calendar-google-connect__text">
               {googleAccessToken ? "Google Calendar connected." : "Connect to show your events on the calendar."}
             </p>
           </div>
           <div className="manager-calendar-google-connect__actions">
             {googleAccessToken ? (
-              <button type="button" className="btn-secondary btn-small" onClick={disconnectGoogleCalendar}>
-                Disconnect
-              </button>
+              <button type="button" className="btn-secondary btn-small" onClick={disconnectGoogleCalendar}>Disconnect</button>
             ) : (
               <button type="button" className="btn-primary btn-small" onClick={connectGoogleCalendar} disabled={!user}>
                 Connect Google Calendar
@@ -248,53 +214,46 @@ export function ManagerCalendar() {
         </div>
       )}
 
+      {!isGoogleCalendarOAuthConfigured() && (
+        <div className="manager-calendar-google-cta" style={{ marginBottom: "1.5rem" }}>
+          <p className="manager-calendar-google-text">
+            Set <code>REACT_APP_GOOGLE_CLIENT_ID</code> in .env to connect Google Calendar.
+          </p>
+        </div>
+      )}
+
+      {googleAccessToken && googleLoading && (
+        <p className="muted manager-calendar-google-loading" style={{ marginBottom: "0.5rem" }}>Loading Google Calendar…</p>
+      )}
+
       <section className="section manager-calendar-section">
         <div className="manager-calendar-nav">
-          <button type="button" onClick={prevMonth} className="manager-calendar-nav-btn" aria-label="Previous month">
-            {React.createElement(FiChevronLeft as any)}
-          </button>
+          <button type="button" onClick={prevMonth} className="manager-calendar-nav-btn" aria-label="Previous month">{React.createElement(FiChevronLeft as any)}</button>
           <h2 className="manager-calendar-month-title">{monthLabel}</h2>
-          <button type="button" onClick={nextMonth} className="manager-calendar-nav-btn" aria-label="Next month">
-            {React.createElement(FiChevronRight as any)}
-          </button>
+          <button type="button" onClick={nextMonth} className="manager-calendar-nav-btn" aria-label="Next month">{React.createElement(FiChevronRight as any)}</button>
         </div>
-
         <div className="manager-calendar-grid">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-            <div key={d} className="manager-calendar-weekday">
-              {d}
-            </div>
+            <div key={d} className="manager-calendar-weekday">{d}</div>
           ))}
           {dayCells.map((cell, i) => (
-            <div
-              key={i}
-              className={`manager-calendar-day ${cell.day == null ? "manager-calendar-day--empty" : ""}`}
-            >
+            <div key={i} className={`manager-calendar-day ${cell.day == null ? "manager-calendar-day--empty" : ""}`}>
               {cell.day != null && (
                 <>
                   <span className="manager-calendar-day-num">{cell.day}</span>
                   {cell.dateKey && (eventsByDate.get(cell.dateKey) ?? []).length > 0 && (
                     <ul className="manager-calendar-day-events">
                       {(eventsByDate.get(cell.dateKey) ?? []).slice(0, 3).map((item, j) => (
-                        <li
-                          key={j}
-                          className={
-                            item.type === "deadline"
-                              ? `manager-calendar-day-event manager-calendar-day-event--deadline manager-calendar-day-event--deadline-${item.deadlineKind}`
-                              : "manager-calendar-day-event manager-calendar-day-event--google"
-                          }
-                        >
+                        <li key={j} className={item.type === "deadline" ? "manager-calendar-day-event manager-calendar-day-event--deadline manager-calendar-day-event--deadline-mine" : "manager-calendar-day-event manager-calendar-day-event--google"}>
                           {item.type === "deadline" ? (
-                            <>Deadline: {item.assignment.title}</>
+                            <Link to={`/employee/assignment/${item.assignment.id}`} style={{ color: "inherit", textDecoration: "none" }}>Deadline: {item.assignment.title}</Link>
                           ) : (
                             <>{item.event.summary}</>
                           )}
                         </li>
                       ))}
                       {(eventsByDate.get(cell.dateKey) ?? []).length > 3 && (
-                        <li className="manager-calendar-day-event manager-calendar-day-event--more">
-                          +{(eventsByDate.get(cell.dateKey) ?? []).length - 3} more
-                        </li>
+                        <li className="manager-calendar-day-event manager-calendar-day-event--more">+{(eventsByDate.get(cell.dateKey) ?? []).length - 3} more</li>
                       )}
                     </ul>
                   )}
@@ -303,44 +262,31 @@ export function ManagerCalendar() {
             </div>
           ))}
         </div>
-
-        {googleAccessToken && googleLoading && (
-          <p className="muted manager-calendar-google-loading">Loading Google Calendar…</p>
-        )}
       </section>
-
-      {!isGoogleCalendarOAuthConfigured() && (
-        <div className="manager-calendar-google-cta">
-          <p className="manager-calendar-google-text">
-            Set <code>REACT_APP_GOOGLE_CLIENT_ID</code> in .env to connect Google Calendar.
-          </p>
-        </div>
-      )}
 
       <section className="section">
         <h2 className="manager-calendar-section-title">
-          {React.createElement(FiClock as any)} All deadlines & events
+          {activeTasks.length > 0 || googleEvents.length > 0
+            ? "This month"
+            : "Your tasks this month"}
         </h2>
-        {loading ? (
-          <p className="muted">Loading…</p>
-        ) : allActiveAssignments.length === 0 && googleEvents.length === 0 ? (
-          <p className="muted">
-            No deadlines or events yet.
-            {isGoogleCalendarOAuthConfigured() && !googleAccessToken && " Connect Google Calendar above."}
-          </p>
-        ) : (
-          <div className="manager-calendar-three-cols">
+        {(activeTasks.length > 0 || googleEvents.length > 0) ? (
+          <div className="manager-calendar-three-cols manager-calendar-two-cols">
             <div className="manager-calendar-col">
               <h3 className="manager-calendar-col-title">Google Calendar events</h3>
               <ul className="manager-calendar-list">
                 {googleEvents
                   .slice()
-                  .sort((a, b) => a.start.localeCompare(b.start))
+                  .sort((a, b) => new Date(a.start || 0).getTime() - new Date(b.start || 0).getTime())
                   .map((ev) => (
                     <li key={ev.id} className="manager-calendar-item manager-calendar-item--google">
                       <div className="manager-calendar-item-title">{ev.summary}</div>
                       <div className="manager-calendar-item-meta">
-                        <span>{ev.start.slice(0, 10)}</span>
+                        {ev.start
+                          ? ev.start.includes("T")
+                            ? new Date(ev.start).toLocaleString(undefined, { dateStyle: "short", timeStyle: "short" })
+                            : new Date(ev.start + "T12:00:00").toLocaleDateString(undefined, { dateStyle: "short" })
+                          : "—"}
                       </div>
                     </li>
                   ))}
@@ -350,57 +296,32 @@ export function ManagerCalendar() {
               </ul>
             </div>
             <div className="manager-calendar-col">
-              <h3 className="manager-calendar-col-title">Your assignments</h3>
+              <h3 className="manager-calendar-col-title">Your tasks</h3>
               <p className="manager-calendar-col-desc">Tasks assigned to you</p>
               <ul className="manager-calendar-list">
-                {activeToMe
-                  .slice()
-                  .sort((a, b) => getAssignmentDateMs(a) - getAssignmentDateMs(b))
-                  .map((a) => (
-                    <li key={a.id} className="manager-calendar-item manager-calendar-item--deadline manager-calendar-item--deadline-mine">
+                {sortedAssignments.map((a) => (
+                  <li key={a.id} className="manager-calendar-item manager-calendar-item--deadline manager-calendar-item--deadline-mine">
+                    <Link to={`/employee/assignment/${a.id}`} className="manager-calendar-item">
                       <div className="manager-calendar-item-title">{a.title}</div>
                       <div className="manager-calendar-item-meta">
-                        {getAssignmentDateMs(a) > 0 ? (
-                          <span>Due: {new Date(getAssignmentDateMs(a)).toLocaleDateString(undefined, { dateStyle: "medium" })}</span>
-                        ) : (
-                          <span>{a.timeline || "No date"}</span>
-                        )}
-                        <span className={`manager-calendar-status manager-calendar-status--${a.status}`}>{a.status.replace("_", " ")}</span>
+                        {getAssignmentDateMs(a) > 0 ? new Date(getAssignmentDateMs(a)).toLocaleDateString(undefined, { dateStyle: "medium" }) : a.timeline}
                       </div>
-                    </li>
-                  ))}
-                {activeToMe.length === 0 && (
-                  <li className="manager-calendar-list-empty muted">No assignments</li>
-                )}
-              </ul>
-            </div>
-            <div className="manager-calendar-col">
-              <h3 className="manager-calendar-col-title">Things you assigned</h3>
-              <p className="manager-calendar-col-desc">Tasks you assigned or delegated</p>
-              <ul className="manager-calendar-list">
-                {activeByMe
-                  .slice()
-                  .sort((a, b) => getAssignmentDateMs(a) - getAssignmentDateMs(b))
-                  .map((a) => (
-                    <li key={a.id} className="manager-calendar-item manager-calendar-item--deadline manager-calendar-item--deadline-subordinate">
-                      <div className="manager-calendar-item-title">{a.title}</div>
-                      <div className="manager-calendar-item-meta">
-                        {getAssignmentDateMs(a) > 0 ? (
-                          <span>Due: {new Date(getAssignmentDateMs(a)).toLocaleDateString(undefined, { dateStyle: "medium" })}</span>
-                        ) : (
-                          <span>{a.timeline || "No date"}</span>
-                        )}
-                        <span>{a.assignedToName}</span>
-                        <span className={`manager-calendar-status manager-calendar-status--${a.status}`}>{a.status.replace("_", " ")}</span>
-                      </div>
-                    </li>
-                  ))}
-                {activeByMe.length === 0 && (
-                  <li className="manager-calendar-list-empty muted">No assignments</li>
+                    </Link>
+                  </li>
+                ))}
+                {sortedAssignments.length === 0 && (
+                  <li className="manager-calendar-list-empty muted">No tasks this month</li>
                 )}
               </ul>
             </div>
           </div>
+        ) : loading ? (
+          <p className="muted">Loading…</p>
+        ) : (
+          <p className="muted">
+            No tasks with dates.
+            {isGoogleCalendarOAuthConfigured() && !googleAccessToken && " Connect Google Calendar above."}
+          </p>
         )}
       </section>
     </div>

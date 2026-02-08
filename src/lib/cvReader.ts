@@ -9,6 +9,7 @@ import {
   parseCVWithGroq,
   summarizeBioForCV,
   extractQualificationKeywordsFromCV,
+  summarizeLongExperienceForCV,
 } from "./groq";
 
 export interface ParsedCV {
@@ -227,11 +228,20 @@ export async function readCVFile(file: File): Promise<ParsedCV> {
       extractQualificationKeywordsFromCV(fullText),
     ]);
     const merged = mergeParsedCV(ruleBased, groqParsed);
+    const longExperience = merged.experience ?? merged.workEx ?? "";
+    const experienceSummary =
+      longExperience.trim().length > 400
+        ? await summarizeLongExperienceForCV(longExperience)
+        : null;
     return {
       ...merged,
       bio: bioSummary ?? merged.bio,
       qualifications:
         qualificationKeywords.length > 0 ? qualificationKeywords : merged.qualifications,
+      ...(experienceSummary && {
+        experience: experienceSummary,
+        workEx: experienceSummary,
+      }),
     };
   } catch (e) {
     console.warn("CV Groq parse error", e);

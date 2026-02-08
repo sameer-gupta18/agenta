@@ -1,29 +1,46 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Outlet, NavLink } from "react-router-dom";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Outlet, NavLink, Link, useNavigate } from "react-router-dom";
 import { Effect } from "effect";
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
 import { FirestoreService, runWithAppLayer } from "../lib/effect";
-import type { Notification } from "../types";
+import type { Notification, ProjectAssignment } from "../types";
 import {
   FiGrid,
   FiUsers,
   FiCalendar,
+  FiCheckCircle,
   FiSettings,
   FiLogOut,
   FiSend,
   FiSearch,
   FiMenu,
   FiBell,
+  FiMessageCircle,
+  FiUser,
 } from "react-icons/fi";
 import "./ManagerLayout.css";
 
 export function ManagerLayout() {
+  const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const notifRef = useRef<HTMLDivElement>(null);
+  const [myTimelineAssignments, setMyTimelineAssignments] = useState<ProjectAssignment[]>([]);
+  const [upcomingAssignments, setUpcomingAssignments] = useState<ProjectAssignment[]>([]);
+  const [hasManager, setHasManager] = useState(false);
+
+  useEffect(() => {
+    if (!user?.uid) return;
+    const program = Effect.gen(function* () {
+      const fs = yield* FirestoreService;
+      const me = yield* fs.getManager(user.uid);
+      return Boolean(me?.reportsTo);
+    });
+    Effect.runPromise(runWithAppLayer(program)).then(setHasManager).catch(() => setHasManager(false));
+  }, [user?.uid]);
 
   useEffect(() => {
     if (!user?.uid) return;
@@ -35,6 +52,29 @@ export function ManagerLayout() {
     Effect.runPromise(runWithAppLayer(program)).then((u) => { unsub = u; }).catch(() => {});
     return () => { unsub?.(); };
   }, [user?.uid]);
+
+  const loadSidebarAssignments = useCallback(() => {
+    if (!user?.uid) return;
+    const program = Effect.gen(function* () {
+      const fs = yield* FirestoreService;
+      const assignedToMe = yield* fs.getAssignmentsAssignedTo(user.uid);
+      const assignedByMe = yield* fs.getAssignmentsByManager(user.uid);
+      /* Exclude completed; they appear only on Completed tasks page */
+      const myCurrent = (assignedToMe ?? []).filter((a: ProjectAssignment) => a.status !== "completed");
+      const upcoming = (assignedByMe ?? []).filter((a: ProjectAssignment) => a.status !== "completed");
+      return { myCurrent, upcoming };
+    });
+    Effect.runPromise(runWithAppLayer(program))
+      .then(({ myCurrent, upcoming }) => {
+        setMyTimelineAssignments(myCurrent);
+        setUpcomingAssignments(upcoming);
+      })
+      .catch(() => {});
+  }, [user?.uid]);
+
+  useEffect(() => {
+    loadSidebarAssignments();
+  }, [loadSidebarAssignments]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -74,10 +114,32 @@ export function ManagerLayout() {
             {React.createElement(FiCalendar as any)}
             <span>Manager&apos;s calendar</span>
           </NavLink>
-          <NavLink to="/manager/settings" className={({ isActive }) => "manager-layout__nav-item" + (isActive ? " manager-layout__nav-item--active" : "")}>
-            {React.createElement(FiSettings as any)}
-            <span>Settings</span>
+          <NavLink to="/manager/completed" className={({ isActive }) => "manager-layout__nav-item" + (isActive ? " manager-layout__nav-item--active" : "")}>
+            {React.createElement(FiCheckCircle as any)}
+            <span>Completed tasks</span>
           </NavLink>
+          <NavLink to="/manager/requests" className={({ isActive }) => "manager-layout__nav-item" + (isActive ? " manager-layout__nav-item--active" : "")}>
+            {React.createElement(FiMessageCircle as any)}
+            <span>Team requests</span>
+          </NavLink>
+          {hasManager && (
+            <>
+              <NavLink to="/manager/settings" className={({ isActive }) => "manager-layout__nav-item" + (isActive ? " manager-layout__nav-item--active" : "")}>
+                {React.createElement(FiUser as any)}
+                <span>Profile</span>
+              </NavLink>
+              <NavLink to="/manager/my-requests" className={({ isActive }) => "manager-layout__nav-item" + (isActive ? " manager-layout__nav-item--active" : "")}>
+                {React.createElement(FiMessageCircle as any)}
+                <span>Questions &amp; Requests</span>
+              </NavLink>
+            </>
+          )}
+          {!hasManager && (
+            <NavLink to="/manager/settings" className={({ isActive }) => "manager-layout__nav-item" + (isActive ? " manager-layout__nav-item--active" : "")}>
+              {React.createElement(FiSettings as any)}
+              <span>Settings</span>
+            </NavLink>
+          )}
           <NavLink
             to="/manager/assign"
             className={({ isActive }) => "manager-layout__nav-item manager-layout__nav-item--assign" + (isActive ? " manager-layout__nav-item--active" : "")}
@@ -110,10 +172,24 @@ export function ManagerLayout() {
                       <li
                         key={n.id}
                         className={"manager-layout__notif-item" + (n.read ? "" : " manager-layout__notif-item--unread")}
-                        onClick={() => { if (!n.read) handleMarkRead(n.id); }}
+                        onClick={() => {
+                          if (n.metadata?.requestId) {
+                            setShowNotifications(false);
+                            navigate("/manager/requests");
+                          }
+                          if (!n.read) handleMarkRead(n.id);
+                        }}
                         role="button"
                         tabIndex={0}
-                        onKeyDown={(e) => { if (e.key === "Enter" && !n.read) handleMarkRead(n.id); }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            if (n.metadata?.requestId) {
+                              setShowNotifications(false);
+                              navigate("/manager/requests");
+                            }
+                            if (!n.read) handleMarkRead(n.id);
+                          }
+                        }}
                       >
                         <span className="manager-layout__notif-item-title">{n.title}</span>
                         <span className="manager-layout__notif-item-body">{n.body}</span>
@@ -152,11 +228,43 @@ export function ManagerLayout() {
         </div>
         <section className="manager-layout__right-section">
           <h3 className="manager-layout__right-title">My project timeline</h3>
-          <p className="manager-layout__right-muted">Tasks and deadlines appear here.</p>
+          <p className="manager-layout__right-muted">Assignments assigned to you.</p>
+          <ul className="manager-layout__assign-list">
+            {myTimelineAssignments.length === 0 ? (
+              <li className="manager-layout__assign-empty">No current assignments</li>
+            ) : (
+              myTimelineAssignments.slice(0, 15).map((a) => (
+                <li key={a.id}>
+                  <Link to={`/manager/assignment/${a.id}`} className={"manager-layout__assign-link manager-layout__assign-link--" + (a.importance ?? "medium")}>
+                    <span className="manager-layout__assign-dot" aria-hidden />
+                    <span className="manager-layout__assign-title">{a.title}</span>
+                    {a.deadline != null && (
+                      <span className="manager-layout__assign-meta">{new Date(a.deadline).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}</span>
+                    )}
+                  </Link>
+                </li>
+              ))
+            )}
+          </ul>
         </section>
         <section className="manager-layout__right-section">
           <h3 className="manager-layout__right-title">Upcoming tasks</h3>
-          <p className="manager-layout__right-muted">Your upcoming assignments.</p>
+          <p className="manager-layout__right-muted">Projects you assigned to your team.</p>
+          <ul className="manager-layout__assign-list">
+            {upcomingAssignments.length === 0 ? (
+              <li className="manager-layout__assign-empty">No upcoming assignments</li>
+            ) : (
+              upcomingAssignments.slice(0, 15).map((a) => (
+                <li key={a.id}>
+                  <Link to={`/manager/assignment/${a.id}`} className={"manager-layout__assign-link manager-layout__assign-link--" + (a.importance ?? "medium")}>
+                    <span className="manager-layout__assign-dot" aria-hidden />
+                    <span className="manager-layout__assign-title">{a.title}</span>
+                    <span className="manager-layout__assign-meta">{a.assignedToName}</span>
+                  </Link>
+                </li>
+              ))
+            )}
+          </ul>
         </section>
         <div className="manager-layout__right-footer">
           <span className="manager-layout__user-name">{user?.displayName}</span>

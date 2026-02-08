@@ -44,7 +44,7 @@ export function ManagerTeam() {
         {React.createElement(FiUsers as any)} View your team
       </h1>
       <p className="muted" style={{ marginBottom: "1.5rem" }}>
-        Click a team member to view their details and options.
+        Click a member for details.
       </p>
       {error && (
         <div className="dash-error">
@@ -75,7 +75,7 @@ export function ManagerTeam() {
             </li>
           ))}
           {employees.length === 0 && (
-            <li className="muted">No team members yet. Add employees from the Dashboard.</li>
+            <li className="muted">No team members yet.</li>
           )}
         </ul>
       )}

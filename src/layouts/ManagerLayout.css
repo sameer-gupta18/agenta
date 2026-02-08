@@ -16,6 +16,7 @@
   background: var(--agenta-bg-subtle);
   border-right: 1px solid var(--agenta-border);
   padding: 1.25rem 0;
+  overflow: visible;
 }
 
 .manager-layout__brand {
@@ -70,17 +71,17 @@
 
 .manager-layout__nav-item--assign {
   margin-top: 0.5rem;
-  background: linear-gradient(135deg, #c97070 0%, #b85c5c 100%);
-  color: #fff;
+  background: linear-gradient(135deg, var(--agenta-accent) 0%, #a05050 100%);
+  color: var(--agenta-on-accent);
   font-weight: 600;
   justify-content: center;
 }
 
 .manager-layout__nav-item--assign:hover,
 .manager-layout__nav-item--assign.manager-layout__nav-item--active {
-  background: linear-gradient(135deg, #b85c5c 0%, #a05050 100%);
-  color: #fff;
-  box-shadow: 0 4px 16px rgba(201, 112, 112, 0.35);
+  background: linear-gradient(135deg, #a05050 0%, #904848 100%);
+  color: var(--agenta-on-accent);
+  box-shadow: 0 4px 16px var(--agenta-accent-dim);
 }
 
 .manager-layout__left-footer {
@@ -93,6 +94,7 @@
 
 .manager-layout__notif-wrap--left {
   position: relative;
+  overflow: visible;
 }
 
 .manager-layout__notif-trigger {
@@ -245,9 +247,19 @@
 }
 
 .manager-layout__right-section {
-  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.75rem;
   padding: 0.5rem 0;
   min-width: 0;
+  flex-shrink: 0;
+}
+
+/* First section (My project timeline): natural height. Second (Upcoming tasks): fills rest, extends to bottom */
+.manager-layout__right-section:last-of-type {
+  flex: 1;
+  min-height: 0;
+  margin-bottom: 0;
 }
 
 .manager-layout__right-title {
@@ -255,12 +267,94 @@
   font-weight: 600;
   margin: 0 0 0.5rem 0;
   color: var(--agenta-text);
+  flex-shrink: 0;
 }
 
 .manager-layout__right-muted {
   font-size: 0.85rem;
   color: var(--agenta-text-muted);
+  margin: 0 0 0.5rem 0;
+  flex-shrink: 0;
+}
+
+.manager-layout__assign-list {
+  list-style: none;
+  padding: 0;
   margin: 0;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.manager-layout__assign-list li {
+  margin-bottom: 0.35rem;
+}
+
+.manager-layout__assign-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--agenta-text);
+  font-size: 0.85rem;
+  border-left: 3px solid var(--agenta-border);
+  transition: background 0.15s, border-color 0.15s;
+  min-width: 0;
+}
+
+.manager-layout__assign-link:hover {
+  background: var(--agenta-bg-subtle);
+}
+
+.manager-layout__assign-link--low {
+  border-left-color: #22c55e;
+}
+
+.manager-layout__assign-link--medium {
+  border-left-color: #eab308;
+}
+
+.manager-layout__assign-link--high {
+  border-left-color: #f97316;
+}
+
+.manager-layout__assign-link--critical {
+  border-left-color: #ef4444;
+}
+
+.manager-layout__assign-dot {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.manager-layout__assign-link--low .manager-layout__assign-dot { background: #22c55e; }
+.manager-layout__assign-link--medium .manager-layout__assign-dot { background: #eab308; }
+.manager-layout__assign-link--high .manager-layout__assign-dot { background: #f97316; }
+.manager-layout__assign-link--critical .manager-layout__assign-dot { background: #ef4444; }
+
+.manager-layout__assign-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.manager-layout__assign-meta {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: var(--agenta-text-muted);
+}
+
+.manager-layout__assign-empty {
+  font-size: 0.85rem;
+  color: var(--agenta-text-muted);
+  padding: 0.5rem 0;
 }
 
 .manager-layout__right-footer {
@@ -296,7 +390,7 @@
 }
 
 .manager-layout__sign-out:hover {
-  background: rgba(239, 68, 68, 0.2);
+  background: var(--agenta-accent-dim);
   color: var(--agenta-error);
 }
 
@@ -307,7 +401,7 @@
   padding: 0 5px;
   border-radius: 9px;
   background: var(--agenta-accent);
-  color: #fff;
+  color: var(--agenta-on-accent);
   font-size: 0.7rem;
   font-weight: 700;
   display: flex;
@@ -315,21 +409,24 @@
   justify-content: center;
 }
 
-/* Dropdown when opened from left nav: open to the right so it stays on page */
+/* Dropdown when opened from left nav: open above trigger so it stays in view, opaque background */
 .manager-layout__notif-dropdown--from-left {
   position: absolute;
-  left: 100%;
-  top: 0;
-  margin-left: 0.5rem;
-  width: 300px;
-  max-width: min(300px, calc(100vw - 260px));
-  max-height: 70vh;
+  left: 0;
+  bottom: 100%;
+  margin-bottom: 0.5rem;
+  margin-top: 0;
+  top: auto;
+  width: 100%;
+  min-width: 240px;
+  max-width: 280px;
+  max-height: min(65vh, 400px);
   overflow: hidden;
   background: var(--agenta-card-bg);
   color: var(--agenta-text);
   border: 1px solid var(--agenta-border);
   border-radius: 12px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 12px 32px var(--agenta-overlay);
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -339,8 +436,9 @@
   padding: 0.75rem 1rem;
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--agenta-text);
+  color: inherit;
   border-bottom: 1px solid var(--agenta-border);
+  flex-shrink: 0;
 }
 
 .manager-layout__notif-empty {
@@ -355,6 +453,8 @@
   margin: 0;
   padding: 0;
   overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
 }
 
 .manager-layout__notif-item {
@@ -434,9 +534,14 @@
   .manager-layout__nav-item span {
     display: none;
   }
-  .manager-layout__left-footer {
-    margin-left: auto;
-    border: none;
-    padding: 0;
+.manager-layout__left-footer {
+  margin-left: auto;
+  border: none;
+  padding: 0;
+  }
+
+  .manager-layout__notif-dropdown--from-left {
+    min-width: 280px;
+    max-width: min(320px, calc(100vw - 2rem));
   }
 }

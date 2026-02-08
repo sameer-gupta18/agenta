@@ -37,6 +37,19 @@ export interface ManagerInvite {
   department?: string;
 }
 
+/** Employee invite created by manager; used once for employee self-registration */
+export interface EmployeeInvite {
+  token: string;
+  createdBy: string; // manager uid
+  createdAt: number;
+  expiresAt: number;
+  used: boolean;
+  /** Optional pre-fill from manager. */
+  email?: string;
+  position?: string;
+  department?: string;
+}
+
 /** Manager record in Firestore (managers collection) */
 export interface ManagerRecord extends PersonProfileFields {
   uid: string;
@@ -70,6 +83,44 @@ export interface EmployeeProfile extends PersonProfileFields {
   managerId: string;
   createdAt: number;
   updatedAt: number;
+  /** Optional: career/work goals (used by AI mediator and personal agents). */
+  goals?: string;
+  /** Optional: work preferences e.g. project types, work style (used by AI). */
+  preferences?: string;
+  /** Optional: favorite or target companies (used by AI for task/project alignment). */
+  favoriteCompanies?: string[];
+  /** Work experience entries (e.g. company, role, duration). */
+  workExperience?: string[];
+  /** Awards and recognitions. */
+  awards?: string[];
+  /** Past or side projects (for AI / profile). */
+  projects?: string[];
+  /** Dreams / long-term aspirations (for AI training). */
+  dreams?: string;
+  /** Short-term aspirations (for AI training). */
+  aspirations?: string;
+}
+
+/** Employee request to manager: question, extension, emergency, etc. */
+export type EmployeeRequestType = "question" | "extension" | "emergency" | "other";
+
+export interface EmployeeRequest {
+  id: string;
+  fromEmployee: string;
+  fromEmployeeName: string;
+  toManager: string;
+  type: EmployeeRequestType;
+  /** Assignment id when type is extension/emergency. */
+  assignmentId?: string;
+  assignmentTitle?: string;
+  message: string;
+  status: "pending" | "accepted" | "rejected";
+  responseMessage?: string;
+  /** New deadline (ms) when manager accepts extension. */
+  newDeadline?: number;
+  createdAt: number;
+  updatedAt: number;
+  respondedAt?: number;
 }
 
 export type ImportanceLevel = "low" | "medium" | "high" | "critical";
@@ -161,6 +212,7 @@ export interface Notification {
   createdAt: number;
   metadata?: {
     assignmentId?: string;
+    requestId?: string;
     fromUserId?: string;
     fromUserName?: string;
     [key: string]: unknown;

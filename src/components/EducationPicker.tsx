@@ -139,7 +139,7 @@ export function EducationPicker({ value, onChange, className, id, "aria-label": 
   };
 
   return (
-    <div className={className} id={id} aria-label={ariaLabel}>
+    <div className={`education-picker ${className ?? ""}`.trim()} id={id} aria-label={ariaLabel}>
       <div className="education-picker__list">
         {value.map((entry, index) => (
           <div key={index} className="education-picker__row">

@@ -1,11 +1,5 @@
 /* Education picker: match form input styling and consistent layout */
 .education-picker {
-  --ep-border: rgba(255, 255, 255, 0.12);
-  --ep-bg: rgba(255, 255, 255, 0.06);
-  --ep-focus: var(--agenta-accent);
-  --ep-focus-bg: var(--agenta-accent-dim);
-}
-.admin-dash .education-picker {
   --ep-border: var(--agenta-border);
   --ep-bg: var(--agenta-bg-subtle);
   --ep-focus: var(--agenta-accent);
@@ -31,29 +25,41 @@
 }
 
 .education-picker__degree {
-  padding: 0.5rem 0.65rem;
+  padding: 0.55rem 2rem 0.55rem 0.75rem;
   border-radius: 8px;
   border: 1px solid var(--ep-border);
-  background: var(--ep-bg);
-  color: var(--agenta-text, #fff);
+  background-color: var(--agenta-select-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 4.5L6 8L9.5 4.5' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.65rem center;
+  color: var(--agenta-select-text);
   font-size: 0.9rem;
-  min-width: 130px;
-  transition: border-color 0.2s, background 0.2s;
+  min-width: 140px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  transition: border-color 0.2s, background-color 0.2s;
+  box-sizing: border-box;
 }
 .education-picker__degree:hover {
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--agenta-border);
 }
 .education-picker__degree:focus {
   outline: none;
   border-color: var(--ep-focus);
-  background: var(--ep-focus-bg);
+  background-color: var(--agenta-select-bg);
+}
+.education-picker__degree option {
+  background: var(--agenta-option-bg);
+  color: var(--agenta-option-text);
 }
 
 .education-picker__school-label {
   flex: 1;
   min-width: 100px;
   font-size: 0.9rem;
-  color: var(--agenta-text-muted, rgba(255, 255, 255, 0.7));
+  color: var(--agenta-text-muted);
 }
 
 .education-picker__remove {
@@ -68,8 +74,8 @@
   transition: background 0.2s, color 0.2s;
 }
 .education-picker__remove:hover {
-  background: rgba(239, 68, 68, 0.2);
-  color: #fca5a5;
+  background: var(--agenta-accent-dim);
+  color: var(--agenta-error);
 }
 
 .education-picker__add {
@@ -108,13 +114,13 @@
   border-radius: 8px;
   border: 1px solid var(--ep-border);
   background: var(--ep-bg);
-  color: var(--agenta-text, #fff);
+  color: var(--agenta-text);
   font-size: 0.95rem;
   transition: border-color 0.2s, background 0.2s;
   box-sizing: border-box;
 }
 .education-picker__school-input::placeholder {
-  color: var(--agenta-text-muted, rgba(255, 255, 255, 0.4));
+  color: var(--agenta-text-muted);
 }
 .education-picker__school-input:focus {
   outline: none;
@@ -131,18 +137,13 @@
   padding: 0.35rem 0;
   list-style: none;
   /* Opaque background so dropdown does not show content underneath */
-  background: #1a1a24;
+  background: var(--agenta-card-bg);
   border: 1px solid var(--ep-border);
   border-radius: 10px;
   max-height: 220px;
   overflow-y: auto;
   z-index: 20;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-}
-[data-theme="light"] .education-picker__suggestions {
-  background: #ffffff;
-  border-color: rgba(0, 0, 0, 0.12);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px var(--agenta-overlay);
 }
 
 .education-picker__suggestion {
@@ -154,12 +155,7 @@
 }
 .education-picker__suggestion:hover,
 .education-picker__suggestion--focused {
-  /* Opaque hover so content underneath is not visible */
-  background: #252538;
-}
-[data-theme="light"] .education-picker__suggestion:hover,
-[data-theme="light"] .education-picker__suggestion--focused {
-  background: #e8e7f4;
+  background: var(--agenta-bg-subtle);
 }
 
 .education-picker__loading {
@@ -176,7 +172,7 @@
   border-radius: 8px;
   border: none;
   background: linear-gradient(135deg, var(--agenta-accent) 0%, #b85c5c 100%);
-  color: #fff;
+  color: var(--agenta-on-accent);
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;

@@ -13,19 +13,24 @@ interface TagInputProps {
   className?: string;
   id?: string;
   "aria-label"?: string;
+  /** Max number of tags allowed; adding is disabled when at limit. */
+  maxTags?: number;
 }
 
-export function TagInput({ value, onChange, placeholder = "Type a skill and press Enter", className, id, "aria-label": ariaLabel }: TagInputProps) {
+export function TagInput({ value, onChange, placeholder = "Type a skill and press Enter", className, id, "aria-label": ariaLabel, maxTags }: TagInputProps) {
   const [input, setInput] = useState("");
+  const atLimit = typeof maxTags === "number" && value.length >= maxTags;
 
   const addTag = useCallback(
     (raw: string) => {
+      if (atLimit) return;
       const tag = raw.trim();
       if (!tag || value.includes(tag)) return;
-      onChange([...value, tag]);
+      const next = [...value, tag];
+      onChange(typeof maxTags === "number" ? next.slice(0, maxTags) : next);
       setInput("");
     },
-    [value, onChange]
+    [value, onChange, atLimit, maxTags]
   );
 
   const removeTag = useCallback(
@@ -68,7 +73,8 @@ export function TagInput({ value, onChange, placeholder = "Type a skill and pres
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder={value.length === 0 ? placeholder : "Add another…"}
+        placeholder={atLimit ? (typeof maxTags === "number" ? `Maximum ${maxTags} skills` : "Add another…") : value.length === 0 ? placeholder : "Add another…"}
+        disabled={atLimit}
         aria-label={ariaLabel ?? "Add tag"}
       />
     </div>

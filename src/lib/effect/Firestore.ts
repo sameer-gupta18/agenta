@@ -7,6 +7,7 @@ import {
   setDoc,
   addDoc,
   updateDoc,
+  deleteDoc,
   query,
   where,
   onSnapshot,
@@ -16,9 +17,12 @@ import {
 import { getFirebaseDb } from "../../config/firebase";
 import type {
   EmployeeProfile,
+  EmployeeRequest,
+  EmployeeRequestType,
   ProjectAssignment,
   Role,
   ManagerInvite,
+  EmployeeInvite,
   ManagerRecord,
   Notification,
   NotificationType,
@@ -68,13 +72,15 @@ function normalizeManagerDoc(id: string, data: Record<string, unknown>): Manager
 }
 
 function normalizeAssignmentDoc(id: string, data: Record<string, unknown>): ProjectAssignment {
+  const deadlineMs = data?.deadline != null ? toMillisOrNum(data.deadline) : 0;
+  const deadline = deadlineMs > 0 ? deadlineMs : undefined;
   return {
     id,
     title: (data?.title as string) ?? "",
     description: (data?.description as string) ?? "",
     importance: (data?.importance as ProjectAssignment["importance"]) ?? "medium",
     timeline: (data?.timeline as string) ?? "",
-    deadline: typeof data?.deadline === "number" ? data.deadline : undefined,
+    deadline,
     skillsRequired: Array.isArray(data?.skillsRequired) ? (data.skillsRequired as string[]) : undefined,
     assignedBy: (data?.assignedBy as string) ?? "",
     assignedByName: (data?.assignedByName as string) ?? "",
@@ -117,6 +123,14 @@ function normalizeEmployeeDoc(id: string, data: Record<string, unknown>): Employ
     lastAgentTrainedAt: data?.lastAgentTrainedAt as number | undefined,
     bio: data?.bio as string | undefined,
     skillRatings: (data?.skillRatings && typeof data.skillRatings === "object") ? (data.skillRatings as Record<string, number>) : undefined,
+    goals: data?.goals as string | undefined,
+    preferences: data?.preferences as string | undefined,
+    favoriteCompanies: Array.isArray(data?.favoriteCompanies) ? (data.favoriteCompanies as string[]) : undefined,
+    workExperience: Array.isArray(data?.workExperience) ? (data.workExperience as string[]) : undefined,
+    awards: Array.isArray(data?.awards) ? (data.awards as string[]) : undefined,
+    projects: Array.isArray(data?.projects) ? (data.projects as string[]) : undefined,
+    dreams: data?.dreams as string | undefined,
+    aspirations: data?.aspirations as string | undefined,
   };
 }
 
@@ -130,6 +144,25 @@ function normalizeNotificationDoc(id: string, data: Record<string, unknown>): No
     read: Boolean(data?.read),
     createdAt: toMillisOrNum(data?.createdAt),
     metadata: data?.metadata && typeof data.metadata === "object" ? (data.metadata as Notification["metadata"]) : undefined,
+  };
+}
+
+function normalizeEmployeeRequestDoc(id: string, data: Record<string, unknown>): EmployeeRequest {
+  return {
+    id,
+    fromEmployee: (data?.fromEmployee as string) ?? "",
+    fromEmployeeName: (data?.fromEmployeeName as string) ?? "",
+    toManager: (data?.toManager as string) ?? "",
+    type: (data?.type as EmployeeRequestType) ?? "question",
+    assignmentId: data?.assignmentId as string | undefined,
+    assignmentTitle: data?.assignmentTitle as string | undefined,
+    message: (data?.message as string) ?? "",
+    status: (data?.status as EmployeeRequest["status"]) ?? "pending",
+    responseMessage: data?.responseMessage as string | undefined,
+    newDeadline: data?.newDeadline != null ? Number(data.newDeadline) : undefined,
+    createdAt: toMillisOrNum(data?.createdAt),
+    updatedAt: toMillisOrNum(data?.updatedAt),
+    respondedAt: data?.respondedAt != null ? toMillisOrNum(data.respondedAt) : undefined,
   };
 }
 
@@ -148,9 +181,18 @@ export interface FirestoreService {
   readonly updateAssignmentStatus: (id: string, status: ProjectAssignment["status"], completedAt?: number) => Effect.Effect<void, FirestoreError>;
   readonly updateAssignmentDelegate: (id: string, assignedTo: string, assignedToName: string) => Effect.Effect<void, FirestoreError>;
   readonly updateAssignmentSkillsUsed: (id: string, skillsUsed: string[]) => Effect.Effect<void, FirestoreError>;
+  readonly updateAssignment: (id: string, partial: Partial<Pick<ProjectAssignment, "deadline" | "timeline">>) => Effect.Effect<void, FirestoreError>;
+  readonly deleteAssignment: (id: string) => Effect.Effect<void, FirestoreError>;
+  readonly createEmployeeRequest: (req: Omit<EmployeeRequest, "id" | "createdAt" | "updatedAt">) => Effect.Effect<string, FirestoreError>;
+  readonly getEmployeeRequestsByEmployee: (employeeId: string) => Effect.Effect<EmployeeRequest[], FirestoreError>;
+  readonly getEmployeeRequestsByManager: (managerId: string) => Effect.Effect<EmployeeRequest[], FirestoreError>;
+  readonly updateEmployeeRequest: (id: string, partial: Partial<Pick<EmployeeRequest, "status" | "responseMessage" | "newDeadline" | "respondedAt">>) => Effect.Effect<void, FirestoreError>;
   readonly createManagerInvite: (token: string, createdBy: string, expiresAt: number, reportsTo?: string | null, reportsToDisplayName?: string, position?: string, department?: string) => Effect.Effect<void, FirestoreError>;
   readonly getManagerInvite: (token: string) => Effect.Effect<ManagerInvite | null, FirestoreError>;
   readonly markManagerInviteUsed: (token: string) => Effect.Effect<void, FirestoreError>;
+  readonly createEmployeeInvite: (token: string, createdBy: string, expiresAt: number, email?: string, position?: string, department?: string) => Effect.Effect<void, FirestoreError>;
+  readonly getEmployeeInvite: (token: string) => Effect.Effect<EmployeeInvite | null, FirestoreError>;
+  readonly markEmployeeInviteUsed: (token: string) => Effect.Effect<void, FirestoreError>;
   readonly getManagers: () => Effect.Effect<ManagerRecord[], FirestoreError>;
   readonly getManager: (uid: string) => Effect.Effect<ManagerRecord | null, FirestoreError>;
   readonly getPersonRole: (uid: string) => Effect.Effect<Role | null, FirestoreError>;
@@ -219,11 +261,13 @@ export const FirestoreServiceLive = Layer.succeed(FirestoreService, {
 
   updateEmployeeProfile: (uid: string, partial) =>
     Effect.tryPromise({
-      try: () =>
-        updateDoc(doc(db(), "employeeProfiles", uid), {
-          ...partial,
-          updatedAt: Date.now(),
-        }),
+      try: () => {
+        const updates: Record<string, unknown> = { updatedAt: Date.now() };
+        for (const [k, v] of Object.entries(partial)) {
+          if (v !== undefined) updates[k] = v;
+        }
+        return updateDoc(doc(db(), "employeeProfiles", uid), updates as any);
+      },
       catch: (e) => toFirestoreError(e),
     }),
 
@@ -329,6 +373,87 @@ export const FirestoreServiceLive = Layer.succeed(FirestoreService, {
       catch: (e) => toFirestoreError(e),
     }),
 
+  updateAssignment: (id: string, partial: Partial<Pick<ProjectAssignment, "deadline" | "timeline">>) =>
+    Effect.tryPromise({
+      try: () => {
+        const updates: Record<string, number | string> = { updatedAt: Date.now() };
+        if (partial.deadline !== undefined) updates.deadline = partial.deadline;
+        if (partial.timeline !== undefined) updates.timeline = partial.timeline;
+        return updateDoc(doc(db(), "projectAssignments", id), updates as any);
+      },
+      catch: (e) => toFirestoreError(e),
+    }),
+
+  deleteAssignment: (id: string) =>
+    Effect.tryPromise({
+      try: () => deleteDoc(doc(db(), "projectAssignments", id)),
+      catch: (e) => toFirestoreError(e),
+    }),
+
+  createEmployeeRequest: (req) =>
+    Effect.tryPromise({
+      try: async () => {
+        const data: Record<string, unknown> = {
+          fromEmployee: req.fromEmployee,
+          fromEmployeeName: req.fromEmployeeName,
+          toManager: req.toManager,
+          type: req.type,
+          message: req.message,
+          status: req.status,
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+        };
+        if (req.assignmentId != null) data.assignmentId = req.assignmentId;
+        if (req.assignmentTitle != null) data.assignmentTitle = req.assignmentTitle;
+        const ref = await addDoc(collection(db(), "employeeRequests"), data);
+        return ref.id;
+      },
+      catch: (e) => toFirestoreError(e),
+    }),
+
+  getEmployeeRequestsByEmployee: (employeeId: string) =>
+    Effect.tryPromise({
+      try: async () => {
+        const q = query(
+          collection(db(), "employeeRequests"),
+          where("fromEmployee", "==", employeeId)
+        );
+        const snap = await getDocs(q);
+        const list = snap.docs.map((d) => normalizeEmployeeRequestDoc(d.id, d.data() as Record<string, unknown>));
+        list.sort((a, b) => b.createdAt - a.createdAt);
+        return list;
+      },
+      catch: (e) => toFirestoreError(e),
+    }),
+
+  getEmployeeRequestsByManager: (managerId: string) =>
+    Effect.tryPromise({
+      try: async () => {
+        const q = query(
+          collection(db(), "employeeRequests"),
+          where("toManager", "==", managerId)
+        );
+        const snap = await getDocs(q);
+        const list = snap.docs.map((d) => normalizeEmployeeRequestDoc(d.id, d.data() as Record<string, unknown>));
+        list.sort((a, b) => b.createdAt - a.createdAt);
+        return list;
+      },
+      catch: (e) => toFirestoreError(e),
+    }),
+
+  updateEmployeeRequest: (id: string, partial) =>
+    Effect.tryPromise({
+      try: () => {
+        const updates: Record<string, number | string> = { updatedAt: Date.now() };
+        if (partial.status !== undefined) updates.status = partial.status;
+        if (partial.responseMessage !== undefined) updates.responseMessage = partial.responseMessage;
+        if (partial.newDeadline !== undefined) updates.newDeadline = partial.newDeadline;
+        if (partial.respondedAt !== undefined) updates.respondedAt = partial.respondedAt;
+        return updateDoc(doc(db(), "employeeRequests", id), updates as any);
+      },
+      catch: (e) => toFirestoreError(e),
+    }),
+
   createManagerInvite: (token: string, createdBy: string, expiresAt: number, reportsTo?: string | null, reportsToDisplayName?: string, position?: string, department?: string) =>
     Effect.tryPromise({
       try: () =>
@@ -373,6 +498,50 @@ export const FirestoreServiceLive = Layer.succeed(FirestoreService, {
     Effect.tryPromise({
       try: () =>
         updateDoc(doc(db(), "managerInvites", token), { used: true }),
+      catch: (e) => toFirestoreError(e),
+    }),
+
+  createEmployeeInvite: (token: string, createdBy: string, expiresAt: number, email?: string, position?: string, department?: string) =>
+    Effect.tryPromise({
+      try: () =>
+        setDoc(doc(db(), "employeeInvites", token), {
+          token,
+          createdBy,
+          createdAt: Date.now(),
+          expiresAt,
+          used: false,
+          ...(email !== undefined && email.trim() !== "" && { email: email.trim() }),
+          ...(position !== undefined && position.trim() !== "" && { position: position.trim() }),
+          ...(department !== undefined && department.trim() !== "" && { department: department.trim() }),
+        }),
+      catch: (e) => toFirestoreError(e),
+    }),
+
+  getEmployeeInvite: (token: string) =>
+    Effect.tryPromise({
+      try: async () => {
+        const ref = doc(db(), "employeeInvites", token);
+        const snap = await getDoc(ref);
+        if (!snap.exists()) return null;
+        const data = snap.data();
+        return {
+          token: snap.id,
+          createdBy: data?.createdBy ?? "",
+          createdAt: (data?.createdAt?.toMillis?.() ?? data?.createdAt) ?? 0,
+          expiresAt: (data?.expiresAt?.toMillis?.() ?? data?.expiresAt) ?? 0,
+          used: data?.used ?? false,
+          email: data?.email ?? undefined,
+          position: data?.position ?? undefined,
+          department: data?.department ?? undefined,
+        } as EmployeeInvite;
+      },
+      catch: (e) => toFirestoreError(e),
+    }),
+
+  markEmployeeInviteUsed: (token: string) =>
+    Effect.tryPromise({
+      try: () =>
+        updateDoc(doc(db(), "employeeInvites", token), { used: true }),
       catch: (e) => toFirestoreError(e),
     }),
 

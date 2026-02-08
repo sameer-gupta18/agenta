@@ -8,19 +8,35 @@
   --agenta-text-muted: rgba(255, 255, 255, 0.6);
   --agenta-accent: #c97070;
   --agenta-accent-dim: rgba(201, 112, 112, 0.2);
+  --agenta-on-accent: #ffffff;
   --agenta-error: #fca5a5;
+  --agenta-success: #4ade80;
+  --agenta-success-dim: rgba(34, 197, 94, 0.2);
+  --agenta-overlay: rgba(0, 0, 0, 0.5);
+  --agenta-select-bg: #1e1e24;
+  --agenta-select-text: #f4f4f5;
+  --agenta-option-bg: #1e1e24;
+  --agenta-option-text: #f4f4f5;
 }
 
 [data-theme="light"] {
-  --agenta-bg: #f8f9fb;
-  --agenta-bg-subtle: rgba(0, 0, 0, 0.04);
+  --agenta-bg: #f0f2f5;
+  --agenta-bg-subtle: rgba(0, 0, 0, 0.05);
   --agenta-card-bg: #ffffff;
-  --agenta-border: rgba(0, 0, 0, 0.1);
+  --agenta-border: rgba(0, 0, 0, 0.12);
   --agenta-text: #1a1a1f;
-  --agenta-text-muted: rgba(0, 0, 0, 0.7);
+  --agenta-text-muted: rgba(0, 0, 0, 0.65);
   --agenta-accent: #b85c5c;
-  --agenta-accent-dim: rgba(184, 92, 92, 0.15);
+  --agenta-accent-dim: rgba(184, 92, 92, 0.12);
+  --agenta-on-accent: #ffffff;
   --agenta-error: #dc2626;
+  --agenta-success: #16a34a;
+  --agenta-success-dim: rgba(34, 197, 94, 0.15);
+  --agenta-overlay: rgba(0, 0, 0, 0.35);
+  --agenta-select-bg: #ffffff;
+  --agenta-select-text: #1a1a1f;
+  --agenta-option-bg: #ffffff;
+  --agenta-option-text: #1a1a1f;
 }
 
 body {
@@ -33,7 +49,47 @@ body {
   color: var(--agenta-text);
 }
 
+/* Global scrollbars: match app theme (dark/light) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--agenta-border) var(--agenta-bg-subtle);
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--agenta-bg-subtle);
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--agenta-border);
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--agenta-text-muted);
+}
+
+*::-webkit-scrollbar-corner {
+  background: var(--agenta-bg-subtle);
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* Dropdowns: ensure readable text in both themes (closed select + option list) */
+select {
+  background-color: var(--agenta-select-bg);
+  color: var(--agenta-select-text);
+}
+
+option {
+  background-color: var(--agenta-option-bg);
+  color: var(--agenta-option-text);
 }

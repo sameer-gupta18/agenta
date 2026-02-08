@@ -84,7 +84,7 @@ export function ManagerSettings() {
         {React.createElement(FiSettings as any)} Settings
       </h1>
       <p className="muted" style={{ marginBottom: "1.5rem" }}>
-        Update your non-permanent information. Email change may require re-verification.
+        Edit your details.
       </p>
 
       {error && (
@@ -114,9 +114,9 @@ export function ManagerSettings() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@company.com"
             readOnly
-            title="Email change is not available here. Contact admin if needed."
+            title="Email cannot be changed here."
           />
-          <small className="muted">Email cannot be changed here. Contact your administrator.</small>
+          <small className="muted">Email cannot be changed here.</small>
         </label>
         <label>
           <span>Gender</span>

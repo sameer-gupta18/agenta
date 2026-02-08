@@ -247,7 +247,7 @@
   background: linear-gradient(135deg, var(--agenta-accent) 0%, #b85c5c 100%);
   border: none;
   border-radius: 12px;
-  color: #fff;
+  color: var(--agenta-on-accent);
   font-weight: 600;
   font-size: 0.9375rem;
   cursor: pointer;
@@ -282,7 +282,7 @@
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  box-shadow: 0 8px 32px var(--agenta-overlay), 0 0 0 1px var(--agenta-border);
 }
 
 .admin-dash .invite-box > p:first-child {
@@ -327,7 +327,7 @@
 }
 .admin-dash .invite-box .btn-secondary:hover {
   background: var(--agenta-bg-subtle);
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--agenta-border);
 }
 
 .admin-dash .invite-form {
@@ -341,8 +341,20 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 }
+
+.admin-dash .invite-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.admin-dash .invite-form form .btn-primary--full {
+  margin-top: 0.25rem;
+  margin-bottom: 0;
+}
+
 .admin-dash .invite-form__label {
   display: flex;
   flex-direction: column;
@@ -354,14 +366,14 @@
   padding: 0.6rem 0.75rem;
   border-radius: 8px;
   border: 1px solid var(--agenta-border);
-  background: var(--agenta-bg);
-  color: var(--agenta-text);
+  background: var(--agenta-select-bg);
+  color: var(--agenta-select-text);
   font-size: 0.95rem;
   min-width: 200px;
 }
 .admin-dash .invite-form__select option {
-  background: var(--agenta-bg);
-  color: var(--agenta-text);
+  background: var(--agenta-option-bg);
+  color: var(--agenta-option-text);
 }
 .admin-dash .invite-form__input {
   padding: 0.6rem 0.75rem;
@@ -382,39 +394,279 @@
   border-color: var(--agenta-accent);
 }
 
+/* Admin panels: Global notification & Add person */
 .admin-dash .section--global-notif {
   margin-bottom: 1.5rem;
 }
 
-.admin-dash .global-notif-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 480px;
-}
-
-.admin-dash .global-notif-textarea {
-  width: 100%;
-  padding: 0.6rem 0.75rem;
-  border-radius: 8px;
+.admin-panel {
+  background: var(--agenta-card-bg);
   border: 1px solid var(--agenta-border);
-  background: var(--agenta-bg);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.admin-panel__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--agenta-border);
+}
+
+.admin-panel__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(14, 165, 233, 0.15) 100%);
+  color: #38bdf8;
+  flex-shrink: 0;
+  font-size: 1.25rem;
+}
+
+.admin-panel--add-person .admin-panel__icon {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(22, 163, 74, 0.15) 100%);
+  color: #4ade80;
+}
+
+.admin-panel__title {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
   color: var(--agenta-text);
-  font-size: 0.95rem;
-  resize: vertical;
-  min-height: 80px;
-  box-sizing: border-box;
 }
 
-.admin-dash .global-notif-textarea:focus {
-  outline: none;
-  border-color: var(--agenta-accent);
-}
-
-.admin-dash .global-notif-success {
+.admin-panel__desc {
   margin: 0;
   font-size: 0.9rem;
-  color: var(--agenta-accent);
+  color: var(--agenta-text-muted);
+  line-height: 1.45;
+}
+
+.admin-panel__body {
+  padding: 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.admin-panel__success {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #4ade80;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.admin-panel__success::before {
+  content: "✓";
+  font-weight: 700;
+}
+
+.global-notif-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+/* Segmented control: Add manager / Add employee */
+.admin-segmented {
+  display: inline-flex;
+  background: var(--agenta-bg-subtle);
+  border: 1px solid var(--agenta-border);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 0;
+}
+
+.admin-segmented__option {
+  padding: 0.6rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--agenta-text-muted);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.admin-segmented__option:hover {
+  color: var(--agenta-text);
+}
+
+.admin-segmented__option--active {
+  background: var(--agenta-card-bg);
+  color: var(--agenta-text);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* Form fields */
+.admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.admin-field__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--agenta-text-muted);
+}
+
+.admin-field__input,
+.admin-field__select {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid var(--agenta-border);
+  background: var(--agenta-select-bg);
+  color: var(--agenta-select-text);
+  font-size: 0.9375rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.admin-field__input::placeholder {
+  color: var(--agenta-text-muted);
+}
+
+.admin-field__input:focus,
+.admin-field__select:focus {
+  outline: none;
+  border-color: #38bdf8;
+}
+
+.admin-field__textarea {
+  resize: vertical;
+  min-height: 88px;
+}
+
+.admin-field__select {
+  min-width: 0;
+  cursor: pointer;
+}
+
+/* Buttons */
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, opacity 0.2s;
+  border: none;
+}
+
+.admin-btn--block {
+  width: 100%;
+}
+
+.admin-btn--primary {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: var(--agenta-on-accent);
+  box-shadow: 0 2px 12px rgba(14, 165, 233, 0.35);
+}
+
+.admin-btn--primary:hover:not(:disabled) {
+  box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4);
+}
+
+.admin-btn--primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-btn--secondary {
+  background: var(--agenta-bg-subtle);
+  color: var(--agenta-text);
+  border: 1px solid var(--agenta-border);
+}
+
+.admin-btn--secondary:hover {
+  background: var(--agenta-card-bg);
+  border-color: var(--agenta-border);
+}
+
+/* Form container & invite box */
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  background: var(--agenta-card-bg);
+  border: 1px solid var(--agenta-border);
+  border-radius: 12px;
+}
+
+.admin-form__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.admin-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.admin-form__error {
+  margin: 0;
+  padding: 0.65rem 0.9rem;
+  background: var(--agenta-accent-dim);
+  border: 1px solid var(--agenta-error);
+  border-radius: 8px;
+  color: var(--agenta-error);
+  font-size: 0.9rem;
+}
+
+.admin-invite-box {
+  padding: 1.25rem;
+  background: var(--agenta-card-bg);
+  border: 1px solid var(--agenta-border);
+  border-radius: 12px;
+}
+
+.admin-invite-box__text {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.9rem;
+  color: var(--agenta-text);
+}
+
+.admin-invite-box__code {
+  display: block;
+  word-break: break-all;
+  font-size: 0.8125rem;
+  padding: 0.85rem 1rem;
+  background: var(--agenta-bg);
+  border: 1px solid var(--agenta-border);
+  border-radius: 10px;
+  margin: 0 0 0.75rem 0;
+  color: var(--agenta-text);
+}
+
+.admin-invite-box__copied {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.875rem;
+  color: #4ade80;
+}
+
+.admin-invite-box__copied::before {
+  content: "✓ ";
+  font-weight: 700;
 }
 
 .admin-dash .manager-list {

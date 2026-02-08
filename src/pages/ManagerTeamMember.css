@@ -1,3 +1,9 @@
+/* Full-screen employee page for manager */
+.manager-dash--member-full {
+  min-height: 100vh;
+  padding-bottom: 3rem;
+}
+
 .manager-back {
   display: inline-flex;
   align-items: center;
@@ -13,6 +19,68 @@
 
 .manager-back:hover {
   text-decoration: underline;
+}
+
+/* Hero block: large avatar + name, email, role, bio visible to manager */
+.manager-member-hero {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  padding: 2rem;
+  background: var(--agenta-card-bg);
+  border: 1px solid var(--agenta-border);
+  border-radius: 16px;
+  align-items: flex-start;
+}
+
+.manager-member-hero-avatar-wrap {
+  flex-shrink: 0;
+}
+
+.manager-member-hero-avatar {
+  width: 160px;
+  height: 160px;
+  border-radius: 20px;
+  object-fit: cover;
+  display: block;
+}
+
+.manager-member-hero-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.manager-member-hero-name {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 0.35rem 0;
+  letter-spacing: -0.02em;
+}
+
+.manager-member-hero-email {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 0.5rem 0;
+}
+
+.manager-member-hero-role {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 0.25rem 0;
+}
+
+.manager-member-hero-dept {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0 0 0.75rem 0;
+}
+
+.manager-member-hero-bio {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  max-width: 56ch;
 }
 
 .manager-member-header {

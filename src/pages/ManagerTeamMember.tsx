@@ -4,7 +4,7 @@ import { Effect } from "effect";
 import { useAuth } from "../contexts/AuthContext";
 import { FirestoreService, runWithAppLayer } from "../lib/effect";
 import type { EmployeeProfile, ProjectAssignment } from "../types";
-import { FiArrowLeft, FiUser, FiBook, FiBriefcase, FiAlertTriangle } from "react-icons/fi";
+import { FiArrowLeft, FiUser, FiBook, FiBriefcase } from "react-icons/fi";
 import { DEFAULT_SKILL_ELO } from "../lib/skillElo";
 import "./ManagerTeamMember.css";
 import "./ManagerDashboard.css";
@@ -46,26 +46,6 @@ export function ManagerTeamMember() {
       .finally(() => setLoading(false));
   }, [uid, user?.uid]);
 
-  const handleFireConfirm = async () => {
-    if (!uid) return;
-    setFiring(true);
-    setFireMessage(null);
-    try {
-      const { getFunctions, httpsCallable } = await import("firebase/functions");
-      const { getFirebaseApp } = await import("../config/firebase");
-      const fn = getFunctions(getFirebaseApp());
-      const fireEmployee = httpsCallable<{ employeeId: string }, void>(fn, "fireEmployee");
-      await fireEmployee({ employeeId: uid });
-      setShowFireConfirm(false);
-      navigate("/manager/team", { replace: true });
-    } catch (err: unknown) {
-      const msg = err && typeof err === "object" && "message" in err ? String((err as { message: string }).message) : "Request failed";
-      setFireMessage(msg.includes("not found") || msg.includes("NOT_FOUND") ? "Fire employee is not configured. Contact your administrator to remove this employee from the system." : msg);
-    } finally {
-      setFiring(false);
-    }
-  };
-
   if (!user) return null;
   const skillRating = (skill: string) => (profile?.skillRatings ?? {})[skill] ?? DEFAULT_SKILL_ELO;
   const activeAssignments = assignments.filter((a) => a.status === "pending" || a.status === "in_progress");
@@ -90,24 +70,23 @@ export function ManagerTeamMember() {
   }
 
   return (
-    <div className="manager-dash manager-dash--page">
+    <div className="manager-dash manager-dash--page manager-dash--member-full">
       <button type="button" onClick={() => navigate("/manager/team")} className="manager-back">
         {React.createElement(FiArrowLeft as any)} Back to team
       </button>
 
-      <header className="manager-member-header">
-        <img src={getAvatarUrl(profile.uid)} alt="" className="manager-member-avatar" />
-        <div className="manager-member-header-text">
-          <h1 className="manager-member-name">{profile.displayName}</h1>
-          <p className="manager-member-email">{profile.email}</p>
-          {profile.position && <p className="manager-member-role">{profile.position}</p>}
-          <button
-            type="button"
-            className="manager-member-fire"
-            onClick={() => setShowFireConfirm(true)}
-          >
-            {React.createElement(FiAlertTriangle as any)} Fire employee
-          </button>
+      <header className="manager-member-hero">
+        <div className="manager-member-hero-avatar-wrap">
+          <img src={getAvatarUrl(profile.uid)} alt="" className="manager-member-hero-avatar" />
+        </div>
+        <div className="manager-member-hero-text">
+          <h1 className="manager-member-hero-name">{profile.displayName}</h1>
+          <p className="manager-member-hero-email">{profile.email}</p>
+          {profile.position && <p className="manager-member-hero-role">{profile.position}</p>}
+          {profile.department && <p className="manager-member-hero-dept">{profile.department}</p>}
+          {profile.bio && (
+            <p className="manager-member-hero-bio">{profile.bio}</p>
+          )}
         </div>
       </header>
 
@@ -194,25 +173,6 @@ export function ManagerTeamMember() {
         )}
       </section>
 
-      {showFireConfirm && (
-        <div className="modal-overlay" onClick={() => !firing && setShowFireConfirm(false)} role="presentation">
-          <div className="modal-content" onClick={(e) => e.stopPropagation()} role="dialog">
-            <h3>Fire employee</h3>
-            <p className="muted">
-              Are you sure you want to remove {profile.displayName} from your team? This may revoke their access. Contact your administrator if you need to fully remove them from the system.
-            </p>
-            {fireMessage && <p className="dash-error" style={{ marginTop: "0.75rem" }}>{fireMessage}</p>}
-            <div className="form-actions" style={{ marginTop: "1rem" }}>
-              <button type="button" className="btn-primary" onClick={handleFireConfirm} disabled={firing}>
-                {firing ? "Processing…" : "Confirm"}
-              </button>
-              <button type="button" className="btn-secondary" onClick={() => setShowFireConfirm(false)} disabled={firing}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
