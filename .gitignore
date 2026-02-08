@@ -17,6 +17,7 @@ node_modules
 .env.*
 !.env.example
 
+
 # scripts (seed, admin, etc.)
 /scripts
 
